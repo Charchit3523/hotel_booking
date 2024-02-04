@@ -15,12 +15,15 @@ adminLogin();
 </head>
 <body class="bg-light">
     
-    <div class="container-fluid bg-dark text-light p-3 d-flex align-items-center justify-content-between">
-        <h3 class=mb-0 h-font">Admin Pannel</h3>
-        <a href="logout.php"class="btn btn-light btn-sm">Log out</a>
-    </div>
-    <div class="col-lg-2 bg-dark border-top border-3 border-secondary">
-    
+    <?php
+        require('inc/header.php');
+    ?>
+    <div class="container-fluid" id="main-content">
+        <div class="row">
+            <div class="col-lg-10 ms-auto p-4 overflow-hidden" >
+               Dashboard
+            </div>
+        </div>
     </div>
     <?php
         require('inc/scripts.php');
