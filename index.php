@@ -145,14 +145,14 @@
                   </div>
                   <div class="d-flex justify-content-evenly mb-2">             
                   <button onclick="redirect('booking.php')" id="book" type="button" class="btn btn-sm text-white custom-bg shadow-none me-lg-3 me-2" >
-                            Book now
+                            Book
                     </button>
                     <script type="text/javascript">
                         document.getElementById("book").onclick = function () {
-                            location.href = "booking.php.php";
+                            location.href = "booking.php";
                         };
                     </script>
-                  <a href="#" class="btn btn-sm btn-outline-dark shadow-none">More details</a>  
+                  <!-- <a href="#" class="btn btn-sm btn-outline-dark shadow-none">More details</a>   -->
                   </div>             
               </div>
             </div>
@@ -208,7 +208,7 @@
                     </button>
                     <script type="text/javascript">
                         document.getElementById("book").onclick = function () {
-                            location.href = "booking.php.php";
+                            location.href = "booking.php";
                         };
                     </script>
                   <a href="#" class="btn btn-sm btn-outline-dark shadow-none">More details</a>  
@@ -267,7 +267,7 @@
                     </button>
                     <script type="text/javascript">
                         document.getElementById("book").onclick = function () {
-                            location.href = "booking.php.php";
+                            location.href = "booking.php";
                         };
                     </script><a href="#" class="btn btn-sm text-white custom-bg shadow-none">Book now</a>
                   <a href="#" class="btn btn-sm btn-outline-dark shadow-none">More details</a>  
