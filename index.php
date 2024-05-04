@@ -60,11 +60,11 @@
             <div class="row align-items-end">
               <div class="col-lg-3 mb-3">
                 <label  class="form-label" style="font-weihght: 500;">Check-in</label>
-                <input type="date" class="form-control shadow-none" >
+                <input type="date" class="form-control shadow-none" name="date_in" autocomplete="off" value="<?php echo isset($date_in) ? date("Y-m-d",strtotime($date_in)) : "" ?>"> 
               </div>
               <div class="col-lg-3 mb-3">
                 <label  class="form-label" style="font-weihght: 500;">Check-out</label>
-                <input type="date" class="form-control shadow-none" >
+                <input type="date" class="form-control shadow-none" name="date_out" autocomplete="off" value="<?php echo isset($date_out) ? date("Y-m-d",strtotime($date_out)) : "" ?>"> 
               </div>
               <div class="col-lg-3 mb-3">
                 <label  class="form-label" style="font-weihght: 500;">Adult</label>
@@ -83,9 +83,7 @@
                 </select>
               </div>
               <div class="col-lg-1 mb-lg-3 mt-2">
-                <button type="submit" class="btn text-white shadow-none custom-bg">
-                  Submit
-                </button>
+              <button class="btn text-white shadow-none custom-bg">Check Availability</button>
 
               </div>
             </div>
