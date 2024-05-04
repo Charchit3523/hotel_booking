@@ -63,7 +63,8 @@ if(!isset($_SESSION['IS_LOGIN'])){
     </div>
 </nav>
     <!-- swiper js -->
-    <div class="container-fluid px-lg-4 mt-4 ">
+      <!-- swiper js -->
+      <div class="container-fluid px-lg-4 mt-4 ">
       <div class="swiper swiper-container">
         <div class="swiper-wrapper">
           <div class="swiper-slide">
@@ -97,11 +98,11 @@ if(!isset($_SESSION['IS_LOGIN'])){
             <div class="row align-items-end">
               <div class="col-lg-3 mb-3">
                 <label  class="form-label" style="font-weihght: 500;">Check-in</label>
-                <input type="date" class="form-control shadow-none" >
+                <input type="date" class="form-control shadow-none"> 
               </div>
               <div class="col-lg-3 mb-3">
                 <label  class="form-label" style="font-weihght: 500;">Check-out</label>
-                <input type="date" class="form-control shadow-none" >
+                <input type="date" class="form-control shadow-none"> 
               </div>
               <div class="col-lg-3 mb-3">
                 <label  class="form-label" style="font-weihght: 500;">Adult</label>
@@ -120,9 +121,7 @@ if(!isset($_SESSION['IS_LOGIN'])){
                 </select>
               </div>
               <div class="col-lg-1 mb-lg-3 mt-2">
-                <button type="submit" class="btn text-white shadow-none custom-bg">
-                  Submit
-                </button>
+              <button class="btn text-white shadow-none custom-bg">Submit</button>
 
               </div>
             </div>
@@ -132,7 +131,8 @@ if(!isset($_SESSION['IS_LOGIN'])){
       </div>
     </div>
 
-    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font ">Our rooms</h2>
+    <!-- rooms -->
+   <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font ">Our Rooms</h2>
     <div class="container">
       <div class="row">
           <div class="col-lg-4 col-mb-6 my-3">        
@@ -172,7 +172,7 @@ if(!isset($_SESSION['IS_LOGIN'])){
                       </span>
                   </div>
                   <div class="rating mb-4">
-                    <h6 class="mb-1">Rating</h6>
+                  <h6 class="mb-1">Rating</h6>
                     <span class ="badge rounded-pill bg-light">
                       <i class="bi bi-star text-warning"></i>
                       <i class="bi bi-star text-warning"></i>
@@ -296,8 +296,139 @@ if(!isset($_SESSION['IS_LOGIN'])){
           </div>
       </div>
     </div>
-    
 
+    <!-- facilities -->
+    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font ">Our Facilities</h2>
+    <div class="container">
+      <div class="row justify-content-evenly px-lg-0 px-md-0 px-5">
+        <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
+          <img src="images/facilities/wifi.svg" width="80px">
+          <h5 class="mt-3">Wifi</h5>
+        </div>
+        <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
+          <img src="images/facilities/wifi.svg" width="80px">
+          <h5 class="mt-3">Wifi</h5>
+        </div>
+        <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
+          <img src="images/facilities/wifi.svg" width="80px">
+          <h5 class="mt-3">Wifi</h5>
+        </div>
+        <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
+          <img src="images/facilities/wifi.svg" width="80px">
+          <h5 class="mt-3">Wifi</h5>
+        </div>
+        <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
+          <img src="images/facilities/wifi.svg" width="80px">
+          <h5 class="mt-3">Wifi</h5>
+        </div>
+        <div class="col-lh-12 text-center mt-5">
+          <a href="#" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">More Facilities>>></a>
+        </div>
+      </div>
+    </div>
+
+     <!-- testimonials -->
+    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font ">Testimonials</h2>
+     <div class="container">
+     <div class="swiper swiper_testimonials">
+    <div class="swiper-wrapper mb-5">
+      <div class="swiper-slide bg-white p-4">
+        <div class="profile d-flex align-items-center mb-3">
+          <img src="images/facilities/wifi.svg" width="30px">
+          <h6 class="m-0 ms-2 ">Random user</h6>
+          
+        </div>
+        
+       <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eius minus vel, totam nam nemo eos corrupti nostrum molestias et esse?</p>
+       <div class="rating">
+       <i class="bi bi-star text-warning"></i>
+       <i class="bi bi-star text-warning"></i>
+       <i class="bi bi-star text-warning"></i>
+       <i class="bi bi-star text-warning"></i>
+       </div>
+      </div>
+      <div class="swiper-slide bg-white p-4">
+        <div class="profile d-flex align-items-center mb-3">
+          <img src="images/facilities/wifi.svg" width="30px">
+          <h6 class="m-0 ms-2 ">Random user</h6>
+          
+        </div>
+        
+       <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eius minus vel, totam nam nemo eos corrupti nostrum molestias et esse?</p>
+       <div class="rating">
+       <i class="bi bi-star text-warning"></i>
+       <i class="bi bi-star text-warning"></i>
+       <i class="bi bi-star text-warning"></i>
+       <i class="bi bi-star text-warning"></i>
+       </div>
+      </div>
+      <div class="swiper-slide bg-white p-4">
+        <div class="profile d-flex align-items-center mb-3">
+          <img src="images/facilities/wifi.svg" width="30px">
+          <h6 class="m-0 ms-2 ">Random user</h6>
+          
+        </div>
+        
+       <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eius minus vel, totam nam nemo eos corrupti nostrum molestias et esse?</p>
+       <div class="rating">
+       <i class="bi bi-star text-warning"></i>
+       <i class="bi bi-star text-warning"></i>
+       <i class="bi bi-star text-warning"></i>
+       <i class="bi bi-star text-warning"></i>
+       </div>
+      </div>
+
+   
+      
+    </div>
+    <div class="swiper-pagination"></div>
+  </div>
+     </div>
+         <!-- reach us-->
+         <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font ">Reach Us</h2>
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8 col-md-8 p-4 mb-lg-0 mb-3 bg-white rounded">
+            <iframe class="w-100 rounded" height="360pz"  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7064.1475333032795!2d85.30711051253164!3d27.715008604315045!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb18fcb77fd4bd%3A0x58099b1deffed8d4!2sThamel%2C%20Kathmandu%2044600!5e0!3m2!1sen!2snp!4v1714809935973!5m2!1sen!2snp" loading="lazy" ></iframe>
+            </div>
+            <div class="col-lg-4 col-md-4 ">
+              <div class="bg-white p-4 rounded mb-4">
+                <h5>Call Us</h5>
+                <a href="tell: +977-9000000000" class="d-inline-block mb-2 text-decoration-none text-dark">  
+                  <i class="bi bi-telephone"></i> +977-9000000000
+                </a>
+                <br>
+                <a href="tell: +977-9000000000" class="d-inline-block  text-decoration-none text-dark">  
+                  <i class="bi bi-telephone"></i> +977-9000000000
+                </a>
+               
+              </div>
+              <div class="bg-white p-4 rounded mb-4">
+                <h5>Follow Us</h5>
+                <a href="#" class="d-inline-block mb-3 ">  
+                  <span class="badge bg-light text-dark fs-6 p-2">
+                  <i class="bi bi-twitter-x me-1"></i> Twitter
+                  </span>
+                </a>
+                <br>
+                <a href="#" class="d-inline-block mb-3 ">  
+                  <span class="badge bg-light text-dark fs-6 p-2">
+                  <i class="bi bi-facebook me-1"></i> Facebook
+                  </span>
+                </a>
+                <br>
+                <a href="#" class="d-inline-block  ">  
+                  <span class="badge bg-light text-dark fs-6 p-2">
+                  <i class="bi bi-instagram me-1"></i> Instagram
+                  </span>
+                </a>
+                
+               
+              </div>
+
+            </div>
+          </div>
+        </div>
 
     <?php require('inc/footer.php')?>
 
@@ -306,10 +437,6 @@ if(!isset($_SESSION['IS_LOGIN'])){
 
 
 
-    
-    <br><br><br>
-    <br><br><br>
-    <br><br><br>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
  
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -324,6 +451,40 @@ if(!isset($_SESSION['IS_LOGIN'])){
 
     }
   });
+  
+    var swiper = new Swiper(".swiper_testimonials", {
+      effect: "coverflow",
+      grabCursor: true,
+      centeredSlides: true,
+      slidesPerView: "auto",
+      slidesPerView:"3",
+      loop: true,
+      coverflowEffect: {
+        rotate: 50,
+        stretch: 0,
+        depth: 100,
+        modifier: 1,
+        slideShadows: false,
+      },
+      pagination: {
+        el: ".swiper-pagination",
+      },
+      breakpoints: {
+        320:{
+          slidesPerView:1,
+        },
+        6402:{
+          slidesPerView:1,
+        },
+        768:{
+          slidesPerView:2,
+        },
+        1024:{
+          slidesPerView:3,
+        },
+      }
+    });
+  
 </script>
 </body>
 </html> 
