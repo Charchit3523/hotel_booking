@@ -89,7 +89,7 @@ mysqli_close($con);
         </div>
     </div>
 
-    <?php require('inc/scripts.php'); ?>
+<?php require('inc/scripts.php'); ?>
 </body>
 
 </html>

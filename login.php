@@ -102,11 +102,19 @@
 	.signup-form .message{
 		color:red;
 	}
+	.form-group{
+		text-align: center;
+	}
+	.pass{
+		font-size: 13px;
+		
+	}
 </style>
 </head>
 <body>
 <div class="signup-form ">
     <form method="post">
+		<h1>HBW</h1>
 		<h2>Login</h2>
 		<p class="hint-text">Enter your email id and password.</p>
          
@@ -118,7 +126,8 @@
         </div>
 		
 		<div class="form-group">
-            <button type="button" class="btn text-white shadow-none custom-bg" onclick="login_now()">Login Now</button>
+            <button type="button" class="btn text-white shadow-none custom-bg" onclick="login_now()">Login Now</button><br>
+			<a href="#" class="pass color-custom-bg">Forgot password</a>
         </div>
 		<div class="message"></div>
     </form>

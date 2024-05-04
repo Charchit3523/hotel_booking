@@ -182,6 +182,7 @@ if (isset($_POST['submit'])) {
 <body>
 <div class="signup-form">
         <form method="post">
+			<h1>HBW</h1>
             <h2>Register</h2>
             <p class="hint-text">Create your account. It's free and only takes a minute.</p>
             <div class="form-group">
