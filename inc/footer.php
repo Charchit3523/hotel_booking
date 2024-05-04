@@ -4,7 +4,7 @@
         <h3 class="h-font fw-bold fs-3 mb-2"> Hotel booking</h3>
         <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-        Suscipit adipisci sequi voluptas, laudantium cupiditate maxime illo reprehenderit quis cumque, quasi exercitationem magni veritatis fugiat quisquam! Dolore eaque deserunt ducimus maxime!
+       Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ratione, quia?
         </p>
 
     </div>
@@ -18,8 +18,18 @@
     </div>
     <div class="col-lg-4 p-4">
         <h5>Follow us</h5>
+        <a href="#" class="d-inline-block  text-dark text-decoration-none mb-2 ">  
+            <i class="bi bi-twitter-x me-1"></i> Twitter        
+        </a><br>
+        <a href="#" class="d-inline-block  text-dark text-decoration-none mb-2 ">  
+            <i class="bi bi-facebook me-1"></i> Facebook      
+        </a><br>
+        <a href="#" class="d-inline-block  text-dark text-decoration-none mb-2 ">  
+            <i class="bi bi-instagram      me-1"></i> Instagram        
+        </a><br>
 
     </div>
+    <h6 class="text-center bg-dark text-white p-3 m-0"> Creaated by infamous</h6>
 
     </div>
 
