@@ -142,8 +142,15 @@
                     </span>               
                   </div>
                   <div class="d-flex justify-content-evenly mb-2">             
-                  <a href="#" class="btn btn-sm text-white custom-bg shadow-none">Book now</a>
-                  <a href="#" class="btn btn-sm btn-outline-dark shadow-none">More details</a>  
+                  <button onclick="redirect('booking.php')" id="book" type="button" class="btn btn-sm text-white custom-bg shadow-none me-lg-3 me-2" >
+                            Book
+                    </button>
+                    <script type="text/javascript">
+                        document.getElementById("book").onclick = function () {
+                            location.href = "booking.php";
+                        };
+                    </script>
+                  <!-- <a href="#" class="btn btn-sm btn-outline-dark shadow-none">More details</a>   -->
                   </div>             
               </div>
             </div>
@@ -194,7 +201,14 @@
                     </span>               
                   </div>
                   <div class="d-flex justify-content-evenly mb-2">             
-                  <a href="#" class="btn btn-sm text-white custom-bg shadow-none">Book now</a>
+                    <button onclick="redirect('booking.php')" id="book" type="button" class="btn btn-sm text-white custom-bg shadow-none me-lg-3 me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Book now
+                    </button>
+                    <script type="text/javascript">
+                        document.getElementById("book").onclick = function () {
+                            location.href = "booking.php";
+                        };
+                    </script>
                   <a href="#" class="btn btn-sm btn-outline-dark shadow-none">More details</a>  
                   </div>             
                 </div>
@@ -246,7 +260,14 @@
                     </span>               
                   </div>
                   <div class="d-flex justify-content-evenly mb-2">             
-                  <a href="#" class="btn btn-sm text-white custom-bg shadow-none">Book now</a>
+                  <button onclick="redirect('booking.php')" id="book" type="button" class="btn btn-sm text-white custom-bg shadow-none me-lg-3 me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Book now
+                    </button>
+                    <script type="text/javascript">
+                        document.getElementById("book").onclick = function () {
+                            location.href = "booking.php";
+                        };
+                    </script><a href="#" class="btn btn-sm text-white custom-bg shadow-none">Book now</a>
                   <a href="#" class="btn btn-sm btn-outline-dark shadow-none">More details</a>  
                   </div>             
                 </div>
