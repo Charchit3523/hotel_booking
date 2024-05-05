@@ -1,5 +1,8 @@
 <?php
 define('USERS_FOLDER','users/');
+define('SITE_URL','http://localhost/hotel_booking/');
+define('ABOUT_IMG_PATH' ,SITE_URL.'images/about/');
+    
     function adminLogin()
     {
         session_start();

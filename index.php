@@ -348,6 +348,10 @@
   </div>
      </div>
          <!-- reach us-->
+
+         <?php
+         
+         ?>
          <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font ">Reach Us</h2>
         <div class="container">
           <div class="row">
