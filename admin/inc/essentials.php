@@ -10,13 +10,15 @@ define('ABOUT_IMG_PATH' ,SITE_URL.'images/about/');
             echo"<script>
                     window.location.href='index.php';
                 </script>";
+                exit;
         }
-        session_regenerate_id(true);
+        
     }
     function redirect($url){
         echo"<script>
                 window.location.href='$url';
             </script>";
+            exit;
     }
 
     function alert($type,$msg){
