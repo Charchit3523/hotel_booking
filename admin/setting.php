@@ -55,7 +55,7 @@ adminLogin();
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" onclick="site_title.value=general_data.site_title,site_about.value=general_data.site_about" class="btn text-secondary shadow-none" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" onclick="upd_general(site_title.value,site_about.value)" class="btn custom-bg text-white shadow-none">Submit</button>
+                                    <button type="button" onclick="upd_general(site_title.value,site_about.value)" class="btn custom-bg text-white shadow-none">Submit</button>
                                 </div>
                             </div>
                         </form>
@@ -166,13 +166,13 @@ adminLogin();
                                                             <span class="input-group-text" >
                                                                 <i class="bi bi-telephone"></i>
                                                             </span>
-                                                            <input type="text" name="pn1" id="pn1_inp" class="form-control shadow-none" required>
+                                                            <input type="number" name="pn1" id="pn1_inp" class="form-control shadow-none" required>
                                                         </div>
                                                         <div class="input-group mb-3">
                                                             <span class="input-group-text" >
                                                                 <i class="bi bi-telephone"></i>
                                                             </span>
-                                                            <input type="text" name="pn2" id="pn2_inp" class="form-control shadow-none" >
+                                                            <input type="number" name="pn2" id="pn2_inp" class="form-control shadow-none" >
                                                         </div>                                            
                                                     </div>
                                                     <div class="mb-3">

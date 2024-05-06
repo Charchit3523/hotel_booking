@@ -2,6 +2,8 @@
 define('USERS_FOLDER','users/');
 define('SITE_URL','http://localhost/hotel_booking/');
 define('ABOUT_IMG_PATH' ,SITE_URL.'images/about/');
+define('UPLOAD_IMAGE_PATH',$_SERVER['DOCUMENT_ROOT'].'/hotel_booking/images/');
+define('ABOUT_FOLDER','about/');
     
     function adminLogin()
     {
@@ -65,4 +67,37 @@ define('ABOUT_IMG_PATH' ,SITE_URL.'images/about/');
             }
         }
     }
+    
+    // function uploadImage($image,$folder)
+    // {
+    //     $valid_mime=['image/jpeg','image/png','image/webp'];
+    //     $img_mime= $image['type'];
+
+    //     if(!in_array($img_mime,$valid_mime)){
+    //         return 'inv_img';
+    //     }
+    //     else if{
+    //         $ext= pathinfo($image['name'],PATHINFO_EXTENSION);
+    //         $rname='IMG_'.random_int(11111,99999).".jpeg";
+
+    //         $img_path = UPLOAD_IMAGE_PATH.USERS_FOLDER.$rname;
+    //         if($ext =='png' || $ext =='PNG'){
+    //             $img=imagecreatefrompng($image[ 'tmp_name']);
+                
+    //         }
+    //         elseif($ext == 'webp'|| $ext =='WEBP'){
+    //             $img=imagecreatefromwebp($image['tmp_name']);
+    //         }
+    //         else{
+    //             $img=imagecreatefromjpeg($image['tmp_name']);
+    //         }
+    //         if(imagejpeg($img,$img_path,75)){
+    //             return $rname;
+
+    //         }
+    //         else{
+    //             return 'upd_failed';
+    //         }
+    //     }
+    // }
 ?>

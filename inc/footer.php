@@ -10,21 +10,29 @@
     </div>
     <div class="col-lg-4 p-4">
         <h5 class="mb-3">Links</h5>
-        <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none">Home</a><br>
-        <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none">Facilities</a><br>
-        <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none">Room</a><br>
-        <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none">Contact us</a><br>
-        <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none">About</a><br>
+        <a href="index.php" class="d-inline-block mb-2 text-dark text-decoration-none">Home</a><br>
+        <a href="facilities.php" class="d-inline-block mb-2 text-dark text-decoration-none">Facilities</a><br>
+        <a href="rooms.php" class="d-inline-block mb-2 text-dark text-decoration-none">Room</a><br>
+        <a href="contact.php" class="d-inline-block mb-2 text-dark text-decoration-none">Contact us</a><br>
+        <a href="about.php" class="d-inline-block mb-2 text-dark text-decoration-none">About</a><br>
     </div>
     <div class="col-lg-4 p-4">
         <h5>Follow us</h5>
-        <a href="#" class="d-inline-block  text-dark text-decoration-none mb-2 ">  
-            <i class="bi bi-twitter-x me-1"></i> Twitter        
-        </a><br>
-        <a href="#" class="d-inline-block  text-dark text-decoration-none mb-2 ">  
+        <?php
+        if ($contact_r['tw'] != '') {
+            echo <<<data
+            <a href="{$contact_r['tw']}" class="d-inline-block text-dark text-decoration-none mb-2">  
+                
+                    <i class="bi bi-twitter-x me-1"></i> Twitter
+                
+            </a>
+            data;
+        }
+        ?><br>
+        <a href="<?php echo $contact_r['fb']?>" class="d-inline-block  text-dark text-decoration-none mb-2 ">  
             <i class="bi bi-facebook me-1"></i> Facebook      
         </a><br>
-        <a href="#" class="d-inline-block  text-dark text-decoration-none mb-2 ">  
+        <a href="<?php echo $contact_r['insta']?>" class="d-inline-block  text-dark text-decoration-none mb-2 ">  
             <i class="bi bi-instagram      me-1"></i> Instagram        
         </a><br>
 
@@ -35,6 +43,23 @@
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<script>
+    function setActive() {
+        let navbar = document.getElementById('nav-bar');
+        let aTags = navbar.getElementsByTagName('a');
+
+        for (let i = 0; i < aTags.length; i++) {
+            let file = aTags[i].href.split('/').pop();
+            let fileName = file.split('.')[0];
+            if (document.location.href.indexOf(fileName) >= 0) {
+                aTags[i].classList.add('active');
+            }
+        }
+    }
+    setActive();
+</script>
+
+
 <script>
     // function alert(type,msg,position='body'){
     //     let bs_class=(type =='success') ? 'alert-success' : 'alert-danger';
