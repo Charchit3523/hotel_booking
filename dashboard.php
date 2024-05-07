@@ -57,8 +57,8 @@ if(!isset($_SESSION['IS_LOGIN'])){
             <a class="nav-link" href="about.php">About</a>
         </li>  
         </ul>
-        <i class="bi bi-person-circle me-2"></i>
-		<a href="logout.php">Logout</a>
+        <i class="bi bi-person-circle me-2 "></i> 
+		<a href="logout.php" class="btn btn-outline-dark shadow-none me-lg-3 me-2">Logout</a>
     </div>
     </div>
 </nav>

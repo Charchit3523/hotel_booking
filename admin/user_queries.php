@@ -38,7 +38,7 @@ if(isset($_GET['del'])){
             else{
              alert('error','operation failed');
       }
-    }00
+    }
     else{
        $q="DELETE FROM `user_queries` WHERE `sr_no`=?";
        $values=[$frm_data['del']];
@@ -129,5 +129,8 @@ if(isset($_GET['del'])){
             </div>
         </div> 
     </div>
+    <?php
+        require('inc/scripts.php');
+    ?>
 </body>
 </html>
