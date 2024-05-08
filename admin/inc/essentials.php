@@ -2,8 +2,10 @@
 define('USERS_FOLDER','users/');
 define('SITE_URL','http://localhost/hotel_booking/');
 define('ABOUT_IMG_PATH' ,SITE_URL.'images/about/');
+define('FEATURES_IMG_PATH' ,SITE_URL.'images/features/');
 define('UPLOAD_IMAGE_PATH',$_SERVER['DOCUMENT_ROOT'].'/hotel_booking/images/');
 define('ABOUT_FOLDER','about/');
+define('FEATURES_FOLDER','features/');
     
     function adminLogin()
     {
@@ -26,11 +28,11 @@ define('ABOUT_FOLDER','about/');
     function alert($type,$msg){
         $bs_class=($type =="success") ? "alert-success" : "alert-danger";
         echo<<<alert
-            <div class="alert $bs_class alert-dismissible fade show custom-alert" role="alert">
+            <div class="alert $bs_class alert-dismissible fade show custom-alert mt-4" role="alert">
                 <strong class="me-3">$msg</strong> 
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-        alert;
+    alert;
 
 
     }
@@ -59,6 +61,31 @@ define('ABOUT_FOLDER','about/');
                 $img=imagecreatefromjpeg($image['tmp_name']);
             }
             if(imagejpeg($img,$img_path,75)){
+                return $rname;
+
+            }
+            else{
+                return 'upd_failed';
+            }
+        }
+    }
+    function uploadSVGImage($image,$folder)
+    {
+        $valid_mime=['image/svg+xml'];
+        $img_mime= $image['type'];
+
+        if(!in_array($img_mime,$valid_mime)){
+            return 'inv_img';
+        }
+        else if($image['size']/(1024*1024)>1){
+            return 'inv_size';
+        }
+        else{
+            $ext= pathinfo($image['name'],PATHINFO_EXTENSION);
+            $rname='IMG_'.random_int(11111,99999)."(.$ext";
+
+            $img_path=UPLOAD_IMAGE_PATH.$folder.$rname;
+            if(move_uploaded_file($image['tmp_name'],$img_path)){
                 return $rname;
 
             }
