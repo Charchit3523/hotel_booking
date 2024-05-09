@@ -265,11 +265,11 @@
     <div class="container">
       <div class="row justify-content-evenly px-lg-0 px-md-0 px-5">
         <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
-          <img src="images/facilities/wifi.svg" width="80px">
+          <img src="images/features/wifi.svg" width="80px">
           <h5 class="mt-3">Wifi</h5>
         </div>
         <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
-          <img src="images/facilities/wifi.svg" width="80px">
+          <img src="images/features/wifi.svg" width="80px">
           <h5 class="mt-3">Wifi</h5>
         </div>
         <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
@@ -293,56 +293,56 @@
      <!-- testimonials -->
     <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font ">Testimonials</h2>
      <div class="container">
-     <div class="swiper swiper_testimonials">
-    <div class="swiper-wrapper mb-5">
-      <div class="swiper-slide bg-white p-4">
-        <div class="profile d-flex align-items-center mb-3">
-          <img src="images/facilities/wifi.svg" width="30px">
-          <h6 class="m-0 ms-2 ">Random user</h6>
+      <div class="swiper swiper_testimonials">
+      <div class="swiper-wrapper mb-5">
+        <div class="swiper-slide bg-white p-4">
+          <div class="profile d-flex align-items-center mb-3">
+            <img src="images/facilities/wifi.svg" width="30px">
+            <h6 class="m-0 ms-2 ">Random user</h6>
+            
+          </div>
           
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eius minus vel, totam nam nemo eos corrupti nostrum molestias et esse?</p>
+        <div class="rating">
+        <i class="bi bi-star text-warning"></i>
+        <i class="bi bi-star text-warning"></i>
+        <i class="bi bi-star text-warning"></i>
+        <i class="bi bi-star text-warning"></i>
         </div>
-        
-       <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eius minus vel, totam nam nemo eos corrupti nostrum molestias et esse?</p>
-       <div class="rating">
-       <i class="bi bi-star text-warning"></i>
-       <i class="bi bi-star text-warning"></i>
-       <i class="bi bi-star text-warning"></i>
-       <i class="bi bi-star text-warning"></i>
-       </div>
-      </div>
-      <div class="swiper-slide bg-white p-4">
-        <div class="profile d-flex align-items-center mb-3">
-          <img src="images/facilities/wifi.svg" width="30px">
-          <h6 class="m-0 ms-2 ">Random user</h6>
+        </div>
+        <div class="swiper-slide bg-white p-4">
+          <div class="profile d-flex align-items-center mb-3">
+            <img src="images/facilities/wifi.svg" width="30px">
+            <h6 class="m-0 ms-2 ">Random user</h6>
+            
+          </div>
           
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eius minus vel, totam nam nemo eos corrupti nostrum molestias et esse?</p>
+        <div class="rating">
+        <i class="bi bi-star text-warning"></i>
+        <i class="bi bi-star text-warning"></i>
+        <i class="bi bi-star text-warning"></i>
+        <i class="bi bi-star text-warning"></i>
         </div>
-        
-       <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eius minus vel, totam nam nemo eos corrupti nostrum molestias et esse?</p>
-       <div class="rating">
-       <i class="bi bi-star text-warning"></i>
-       <i class="bi bi-star text-warning"></i>
-       <i class="bi bi-star text-warning"></i>
-       <i class="bi bi-star text-warning"></i>
-       </div>
-      </div>
-      <div class="swiper-slide bg-white p-4">
-        <div class="profile d-flex align-items-center mb-3">
-          <img src="images/facilities/wifi.svg" width="30px">
-          <h6 class="m-0 ms-2 ">Random user</h6>
+        </div>
+        <div class="swiper-slide bg-white p-4">
+          <div class="profile d-flex align-items-center mb-3">
+            <img src="images/facilities/wifi.svg" width="30px">
+            <h6 class="m-0 ms-2 ">Random user</h6>
+            
+          </div>
           
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eius minus vel, totam nam nemo eos corrupti nostrum molestias et esse?</p>
+        <div class="rating">
+        <i class="bi bi-star text-warning"></i>
+        <i class="bi bi-star text-warning"></i>
+        <i class="bi bi-star text-warning"></i>
+        <i class="bi bi-star text-warning"></i>
         </div>
-        
-       <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eius minus vel, totam nam nemo eos corrupti nostrum molestias et esse?</p>
-       <div class="rating">
-       <i class="bi bi-star text-warning"></i>
-       <i class="bi bi-star text-warning"></i>
-       <i class="bi bi-star text-warning"></i>
-       <i class="bi bi-star text-warning"></i>
-       </div>
-      </div>
+        </div>
 
-   
-      
+    
+        
     </div>
     <div class="swiper-pagination"></div>
   </div>
@@ -350,7 +350,7 @@
          <!-- reach us-->
 
         
-         <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font ">Reach Us</h2>
+        <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font ">Reach Us</h2>
         <div class="container">
           <div class="row">
             <div class="col-lg-8 col-md-8 p-4 mb-lg-0 mb-3 bg-white rounded">

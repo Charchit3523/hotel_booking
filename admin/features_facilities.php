@@ -2,54 +2,6 @@
 require('inc/essentials.php');
 require('inc/db_config.php');
 adminLogin();
-
-if(isset($_GET['seen'])){
-    $frm_data=filteration($_GET);
-    if($frm_data['seen']=='all'){
-        $q="UPDATE `user_queries` SET `seen`=? ";
-       $values=[1];
-       if(update($q,$values,'i')){
-        alert('success','Marked all as read');
-       }
-       else{
-        alert('error','operation failed');
-       }
-    }
-    else{
-       $q="UPDATE `user_queries` SET `seen`=? WHERE `sr_no`=?";
-       $values=[1,$frm_data['seen']];
-       if(update($q,$values,'ii')){
-        alert('success','Marked as read');
-       }
-       else{
-        alert('error','operation failed');
-       }
-    }
-}
-if(isset($_GET['del'])){
-    $frm_data=filteration($_GET);
-    if($frm_data['del']=='all'){
-        
-            $q="DELETE FROM `user_queries`";
-            
-            if(mysqli_query($con,$q)){
-             alert('success',' all data deleted');
-            }
-            else{
-             alert('error','operation failed');
-      }
-    }
-    else{
-       $q="DELETE FROM `user_queries` WHERE `sr_no`=?";
-       $values=[$frm_data['del']];
-       if(delete($q,$values,'i')){
-        alert('success','deleted');
-       }
-       else{
-        alert('error','operation failed');
-       }
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -201,161 +153,163 @@ if(isset($_GET['del'])){
     <?php
         require('inc/scripts.php');
     ?>
-<script>
-    let feature_s_form = document.getElementById('feature_s_form');
-    let facility_s_form = document.getElementById('facility_s_form');
-    feature_s_form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        add_feature();
-    });
+<script> 
+    
+let feature_s_form = document.getElementById('feature_s_form');
+let facility_s_form = document.getElementById('facility_s_form');
+feature_s_form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    add_feature();
+});
 
-    function add_feature() {
-        let data = new FormData();
-        data.append('name', feature_s_form.elements['feature_name'].value);
-        data.append('add_feature', '');
+function add_feature() {
+    let data = new FormData();
+    data.append('name', feature_s_form.elements['feature_name'].value);
+    data.append('add_feature', '');
 
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", "ajax/features_facilities.php", true);
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "ajax/features_facilities.php", true);
 
-        xhr.onload = function() {
-            if (xhr.status >= 200 && xhr.status < 300) {
-                var myModal = document.getElementById('feature-s');
-                var modal = new bootstrap.Modal(myModal);
-                modal.hide();
-                console.log(xhr.responseText);
+    xhr.onload = function() {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            var myModal = document.getElementById('feature-s');
+            var modal = new bootstrap.Modal(myModal);
+            modal.hide();
+            console.log(xhr.responseText);
 
-                if (xhr.responseText.trim() === '1') {
-                    alert('success', 'New Feature added!');
-                    feature_s_form.elements['feature_name'].value = '';
-                    get_features();
-                } else {
-                    alert('error', 'Upload failed');
-                }
-            } else {
-                console.error('Request failed with status: ' + xhr.status);
-            }
-        };
-
-        xhr.onerror = function() {
-            console.error('Request failed');
-        };
-
-        xhr.send(data);
-    }
-    function get_features(){
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", "ajax/features_facilities.php", true); 
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-        xhr.onload = function(){
-            document.getElementById('features-data').innerHTML =this.responseText;
-        }
-
-        xhr.send('get_features');
-    }
-    function rem_feature(val){
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", "ajax/features_facilities.php", true); 
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        
-        xhr.onload = function(){
-            console.log('Response received:', this.responseText);
-            if (this.responseText == 1) {
-                alert('success', 'Feature removed');
+            if (xhr.responseText.trim() === '1') {
+                alert('success', 'New Feature added!');
+                feature_s_form.elements['feature_name'].value = '';
                 get_features();
             } else {
-                alert('error', 'Server error');
+                alert('error', 'Upload failed');
             }
-        };
-
-        xhr.send('rem_feature=' + val);
-    }
-    facility_s_form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        add_facility();
-    });
-    function add_facility() {
-        let data = new FormData();
-        data.append('name', facility_s_form.elements['facility_name'].value);
-        data.append('icon', facility_s_form.elements['facility_icon'].files[0]);
-        data.append('desc', facility_s_form.elements['facility_description'].value);
-
-        data.append('add_facility', '');
-
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", "ajax/features_facilities.php", true);
-
-        xhr.onload = function() {
-            if (xhr.status >= 200 && xhr.status < 300) {
-                var myModal = document.getElementById('facility-s');
-                var modal = new bootstrap.Modal(myModal);
-                modal.hide();
-                console.log(xhr.responseText);
-
-                if (xhr.responseText.trim() === '1') {
-                    alert('success', 'New Facility added!');
-                    facility_s_form.reset();
-                    get_facilities();
-                    
-                } else if(xhr.responseText.trim() === 'inv_img'){
-                    alert('error', 'invalid image only svg image can be uploaded');
-                }
-                else if(xhr.responseText.trim() === 'inv_size'){
-                    alert('error', 'image should be less than 1mb');
-                }
-                else{
-                    alert('error', 'upload failed');
-                }
-            } else {
-                console.error('Request failed with status: ' + xhr.status);
-            }
-        };
-
-        xhr.onerror = function() {
-            console.error('Request failed');
-        };
-
-        xhr.send(data);
-    }
-    function get_facilities(){
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", "ajax/features_facilities.php", true); 
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-        xhr.onload = function(){
-            document.getElementById('facilities-data').innerHTML =this.responseText;
+        } else {
+            console.error('Request failed with status: ' + xhr.status);
         }
-
-        xhr.send('get_facilities');
-    }
-    function rem_facility(val){
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", "ajax/features_facilities.php", true); 
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        
-        xhr.onload = function(){
-            console.log('Response received:', this.responseText);
-            if (this.responseText == 1) {
-                alert('success', 'Facility removed');
-                get_facilities();
-            }
-            else if(this.responseText == 'room_added'){
-                alert('error', 'facility added in room');
-            }
-            else {
-                alert('error', 'Server error');
-            }
-        };
-
-        xhr.send('rem_facility=' + val);
-    }
-
-    window.onload = function() {
-        get_features(); 
-        get_facilities();
     };
 
-            
+    xhr.onerror = function() {
+        console.error('Request failed');
+    };
+
+    xhr.send(data);
+}
+function get_features(){
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "ajax/features_facilities.php", true); 
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    xhr.onload = function(){
+        document.getElementById('features-data').innerHTML =this.responseText;
+    }
+
+    xhr.send('get_features');
+}
+function rem_feature(val){
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "ajax/features_facilities.php", true); 
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    
+    xhr.onload = function(){
+        console.log('Response received:', this.responseText);
+        if (this.responseText == 1) {
+            alert('success', 'Feature removed');
+            get_features();
+        } else {
+            alert('error', 'Server error');
+        }
+    };
+
+    xhr.send('rem_feature=' + val);
+}
+facility_s_form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    add_facility();
+});
+function add_facility() {
+    let data = new FormData();
+    data.append('name', facility_s_form.elements['facility_name'].value);
+    data.append('icon', facility_s_form.elements['facility_icon'].files[0]);
+    data.append('desc', facility_s_form.elements['facility_description'].value);
+
+    data.append('add_facility', '');
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "ajax/features_facilities.php", true);
+
+    xhr.onload = function() {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            var myModal = document.getElementById('facility-s');
+            var modal = new bootstrap.Modal(myModal);
+            modal.hide();
+            console.log(xhr.responseText);
+
+            if (xhr.responseText.trim() === '1') {
+                alert('success', 'New Facility added!');
+                facility_s_form.reset();
+                get_facilities();
+                
+            } else if(xhr.responseText.trim() === 'inv_img'){
+                alert('error', 'invalid image only svg image can be uploaded');
+            }
+            else if(xhr.responseText.trim() === 'inv_size'){
+                alert('error', 'image should be less than 1mb');
+            }
+            else{
+                alert('error', 'upload failed');
+            }
+        } else {
+            console.error('Request failed with status: ' + xhr.status);
+        }
+    };
+
+    xhr.onerror = function() {
+        console.error('Request failed');
+    };
+
+    xhr.send(data);
+}
+function get_facilities(){
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "ajax/features_facilities.php", true); 
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    xhr.onload = function(){
+        document.getElementById('facilities-data').innerHTML =this.responseText;
+    }
+
+    xhr.send('get_facilities');
+}
+function rem_facility(val){
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "ajax/features_facilities.php", true); 
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    
+    xhr.onload = function(){
+        console.log('Response received:', this.responseText);
+        if (this.responseText == 1) {
+            alert('success', 'Facility removed');
+            get_facilities();
+        }
+        else if(this.responseText == 'room_added'){
+            alert('error', 'facility added in room');
+        }
+        else {
+            alert('error', 'Server error');
+        }
+    };
+
+    xhr.send('rem_facility=' + val);
+}
+
+window.onload = function() {
+    get_features(); 
+    get_facilities();
+};
+
+        
+
 </script>
 </body>
 </html>

@@ -106,6 +106,16 @@
                         Heater
                       </span>
                   </div>
+                  <div class="Guests mb-3">
+                    <h6 class="mb-1">Guests</h6>
+                      <span class="badge rounded-pill bg-light text-dark  text-wrap ">
+                       2 Adults
+                      </span>
+                      <span class="badge rounded-pill bg-light text-dark  text-wrap " >
+                        2 children
+                      </span>
+                     
+                  </div>
                 </div>
                 <div class="col-md-2 mt-lg-0 mt-mf-0 mt-4 text-center">
                   <h6 class="mb-4"> Rs 2000 per night</h6>
@@ -151,6 +161,16 @@
                         Heater
                       </span>
                   </div>
+                  <div class="Guests mb-3">
+                    <h6 class="mb-1">Guests</h6>
+                      <span class="badge rounded-pill bg-light text-dark  text-wrap ">
+                      2 Adults
+                      </span>
+                      <span class="badge rounded-pill bg-light text-dark  text-wrap " >
+                        2 children
+                      </span>
+                    
+                  </div>
                 </div>
                 <div class="col-md-2 text-center">
                   <h6 class="mb-4"> Rs 2000 per night</h6>
@@ -195,6 +215,16 @@
                       <span class="badge rounded-pill bg-light text-dark  text-wrap" >
                         Heater
                       </span>
+                  </div>
+                  <div class="Guests mb-3">
+                    <h6 class="mb-1">Guests</h6>
+                      <span class="badge rounded-pill bg-light text-dark  text-wrap ">
+                       2 Adults
+                      </span>
+                      <span class="badge rounded-pill bg-light text-dark  text-wrap " >
+                        2 children
+                      </span>
+                     
                   </div>
                 </div>
                 <div class="col-md-2 text-center">

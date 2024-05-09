@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
-<title>Login Form</title>
+<title>registration Form</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
 <?php require('inc/links.php')?>
@@ -15,6 +15,8 @@
 	body{
 		color: #fff;
 		background: #63738a;
+		
+		
 		font-family: 'Roboto', sans-serif;
 	}
     .form-control{
@@ -39,21 +41,15 @@
 		position: relative;
 		text-align: center;
     }
-	.signup-form h2:before, .signup-form h2:after{
-		content: "";
-		height: 2px;
-		width: 30%;
-		background: #d4d4d4;
-		position: absolute;
-		top: 50%;
-		z-index: 2;
-	}	
-	.signup-form h2:before{
-		left: 0;
-	}
-	.signup-form h2:after{
-		right: 0;
-	}
+	.signup-form h1{
+		color: #636363;
+        margin: 0 0 15px;
+		
+		text-align: center;
+    }
+	
+	
+	
     .signup-form .hint-text{
 		color: #999;
 		margin-bottom: 30px;
@@ -112,11 +108,15 @@
 </style>
 </head>
 <body>
+
 <div class="signup-form ">
+
+	
     <form method="post">
-		<h1>HBW</h1>
-		<h2>Login</h2>
-		<p class="hint-text">Enter your email id and password.</p>
+		<h1 class="me-3"><img src="images/carousel/logo.png" width="70px">Hotel Booking</h1>
+		<hr>
+		<h2 class="mt-4">Login</h2>
+		<p class="hint-text mt-3">Enter your email id and password.</p>
          
         <div class="form-group">
         	<input type="email" class="form-control" name="email" id="email" placeholder="Email">
@@ -126,13 +126,16 @@
         </div>
 		
 		<div class="form-group">
-            <button type="button" class="btn text-white shadow-none custom-bg" onclick="login_now()">Login Now</button><br>
-			<a href="#" class="pass color-custom-bg">Forgot password</a>
+            <button type="button" class="btn text-white shadow-none custom-bg" onclick="login_now()">Login Now</button>
+			<button type="reset" class="btn text-secondary shadow-none ms-6 mb-2" data-bs-dismiss="modal">Cancel</button><br><br>
+			<a href="#" class="pass  mt-3">Forgot password</a>
         </div>
 		<div class="message"></div>
     </form>
 	<div class="text-center">Create a account? <a href="registration.php">Sign up</a></div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
 <script>
 function login_now(){
 	var email=jQuery('#email').val();
@@ -150,6 +153,8 @@ function login_now(){
 		}
 	});
 }
+
+ 
 </script>
 </body>
 </html>                            

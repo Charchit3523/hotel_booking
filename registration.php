@@ -14,7 +14,9 @@ if (isset($_POST['submit'])) {
     $name = $_POST['name'];
     $email = $_POST['email'];
     $password = $_POST['password'];
-
+	$cpassword = $_POST['cpassword'];
+	$address = $_POST['address'];
+	$phonenumber= $_POST['pn'];
     // Check if email already exists
     $stmt = $con->prepare("SELECT * FROM user WHERE email = ?");
     $stmt->bind_param("s", $email);
@@ -23,11 +25,16 @@ if (isset($_POST['submit'])) {
     $stmt->close();
 
     if ($result->num_rows > 0) {
-        $msg = "Email id already present";
-    } else {
+        $msg = "Email id already present!!";
+    } else if($password!==$cpassword){
+		$msg = "Password does not match Confirm Password!!";
+
+	}
+	else {
         // Insert new user using prepared statement
-        $stmt = $con->prepare("INSERT INTO user (name, email, password, verification_status, verification_id) VALUES (?, ?, ?, 0, ?)");
-        $stmt->bind_param("ssss", $name, $email, $password, $verification_id);
+        $stmt = $con->prepare("INSERT INTO user (name, email, password, cpassword, address, pnonenumber, verification_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
+		$stmt->bind_param("ssssssi", $name, $email, $password, $cpassword, $address, $phonenumber, $verification_id);
+
 
         $verification_id = rand(111111111, 999999999);
         $stmt->execute();
@@ -114,21 +121,15 @@ if (isset($_POST['submit'])) {
 		position: relative;
 		text-align: center;
     }
-	.signup-form h2:before, .signup-form h2:after{
-		content: "";
-		height: 2px;
-		width: 30%;
-		background: #d4d4d4;
-		position: absolute;
-		top: 50%;
-		z-index: 2;
-	}	
-	.signup-form h2:before{
-		left: 0;
-	}
-	.signup-form h2:after{
-		right: 0;
-	}
+	.signup-form h1{
+		color: #636363;
+       
+		
+		text-align: center;
+    }
+		
+		
+
     .signup-form .hint-text{
 		color: #999;
 		margin-bottom: 30px;
@@ -142,9 +143,9 @@ if (isset($_POST['submit'])) {
         box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
         padding: 30px;
     }
-	.signup-form .form-group{
+	/* .signup-form .form-group{
 		margin-bottom: 20px;
-	}
+	} */
 	.signup-form input[type="checkbox"]{
 		margin-top: 3px;
 	}
@@ -182,8 +183,9 @@ if (isset($_POST['submit'])) {
 <body>
 <div class="signup-form">
         <form method="post">
-			<h1>HBW</h1>
-            <h2>Register</h2>
+			<h1 class="me-3"><img src="images/carousel/logo.png" width="80px">Hotel Booking</h1>
+			<hr>
+			<h2 class="mt-4">Register</h2>
             <p class="hint-text">Create your account. It's free and only takes a minute.</p>
             <div class="form-group">
                 <input type="text" class="form-control" name="name" placeholder="Name" required>
@@ -194,9 +196,21 @@ if (isset($_POST['submit'])) {
             <div class="form-group">
                 <input type="password" class="form-control" name="password" placeholder="Password" required>
             </div>
-            <div class="form-group">
-                <button type="submit" name="submit" class="btn text-white shadow-none custom-bg">Register Now</button>
+			<div class="form-group">
+                <input type="password" class="form-control" name="cpassword" placeholder="Confirm Password" required>
             </div>
+			<div class="form-group">
+                <input type="text" class="form-control" name="address" placeholder="Address" required>
+            </div>
+			<div class="form-group">
+                <input type="number" class="form-control" name="pn" placeholder="Phone Number" required>
+            </div>
+            <div class="form-group">
+                <button type="submit" name="submit" class="btn text-white shadow-none custom-bg m-3">Register Now</button>
+				<button type="reset" class="btn text-secondary shadow-none ms-6" data-bs-dismiss="modal">Cancel</button>
+            </div>
+			
+			
             <div class="message">
                 <?php echo $msg; ?>
             </div>
