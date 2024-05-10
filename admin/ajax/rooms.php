@@ -130,7 +130,7 @@
         $del_features=delete("DELETE FROM `room_features` WHERE `room_id`=?",$frm_data['room_id'],'i');
         $del_facilities=delete("DELETE FROM `rooms_facilities` WHERE `room_id`=?",$frm_data['room_id'],'i');
         if(!( $del_features&&$del_facilities)){
-            $flag=0
+            $flag=0;
         }
         $q2="INSERT INTO `rooms_facilities`(`room_id`, `facilities_id`) VALUES (?,?)";
         if($stmt=mysqli_prepare($con,$q2)){
