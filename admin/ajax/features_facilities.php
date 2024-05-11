@@ -33,13 +33,24 @@ data;
 if (isset($_POST['rem_feature'])) {
     $frm_data = filteration($_POST);
     $values = [$frm_data['rem_feature']];
-    $q = "DELETE FROM `features` WHERE `id`=?";
-    // Debugging: Output the SQL query and values
-    error_log("SQL Query: $q, Values: " . json_encode($values));
-    $res = delete($q, $values, 'i');
-    // Debugging: Output the result of the delete operation
-    error_log("Delete Result: $res");
-    echo $res;
+
+    $check_q = select('SELECT * FROM `room_features` WHERE `features_id`=?', [$frm_data['rem_feature']], 'i');
+   
+
+    if(mysqli_num_rows($check_q)==0){
+        $q = "DELETE FROM `features` WHERE `id`=?";
+        // Debugging: Output the SQL query and values
+        error_log("SQL Query: $q, Values: " . json_encode($values));
+        $res = delete($q, $values, 'i');
+        // Debugging: Output the result of the delete operation
+        error_log("Delete Result: $res");
+        echo $res;
+        }
+        else{
+            echo 'room_added';
+            print_r('room added');
+        }
+    
 }
 
 if (isset($_POST['add_facility'])) {

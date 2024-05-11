@@ -17,7 +17,7 @@
             $flag=1;
         }
         $room_id=mysqli_insert_id($con);
-        $q2="INSERT INTO `rooms_facilities`(`room_id`, `facilities_id`) VALUES (?,?)";
+        $q2="INSERT INTO `room_facilities`(`room_id`, `facilities_id`) VALUES (?,?)";
         if($stmt=mysqli_prepare($con,$q2)){
             foreach($facilities as $f){
                 mysqli_stmt_bind_param($stmt,'ii',$room_id,$f);
@@ -29,6 +29,7 @@
             $flag=0;
             die('querry cannot be prepares-insert');
         }
+        $room_id=mysqli_insert_id($con);
         $q3="INSERT INTO `room_features`(`room_id`, `features_id`) VALUES (?,?)";
         if($stmt=mysqli_prepare($con,$q3)){
             foreach($features as $f){
@@ -93,7 +94,7 @@
         $frm_data = filteration($_POST);
         $res1 = select("SELECT * FROM `rooms` WHERE `id`=?", [$frm_data['get_room']], 'i');
         $res2 = select("SELECT * FROM `room_features` WHERE `room_id`=?", [$frm_data['get_room']], 'i');
-        $res3 = select("SELECT * FROM `rooms_facilities` WHERE `room_id`=?", [$frm_data['get_room']], 'i');
+        $res3 = select("SELECT * FROM `room_facilities` WHERE `room_id`=?", [$frm_data['get_room']], 'i');
 
 
         $roomdata=mysqli_fetch_assoc($res1);
@@ -122,17 +123,23 @@
 
         $frm_data = filteration($_POST);
         $flag=0;
-        $q1="UPDATE `rooms` SET `name`=?,`area`=?,`price`=?,`quantity`=?,`adult`=?,`children`=?,`description`=?,`satus`=?, WHERE `id`=?";
-        $values = [$frm_data['name'], $frm_data['area'], $frm_data['price'], $frm_data['quantity'],$frm_data['adult'], $frm_data['children'], $frm_data['desc'],$frm_data['room_id']];
+        
+        $frm_data = filteration($_POST);
+        $flag=0;
+        
+        $q1="UPDATE `rooms` SET `name`=?,`area`=?,`price`=?,`quantity`=?,`adult`=?,`children`=?,`description`=? WHERE `id`=?";
+        $values = [$frm_data['name'], $frm_data['area'], $frm_data['price'], $frm_data['quantity'],$frm_data['adult'], $frm_data['children'], $frm_data['desc'], $frm_data['room_id']];
+        
         if(update($q1, $values,'siiiiisi')){
-          $flsag=1 ;
+          $flag=1 ;
         }
-        $del_features=delete("DELETE FROM `room_features` WHERE `room_id`=?",$frm_data['room_id'],'i');
-        $del_facilities=delete("DELETE FROM `rooms_facilities` WHERE `room_id`=?",$frm_data['room_id'],'i');
+        $del_features = delete("DELETE FROM `room_features` WHERE `room_id`=?", [$frm_data['room_id']], 'i');
+        $del_facilities = delete("DELETE FROM `room_facilities` WHERE `room_id`=?", [$frm_data['room_id']], 'i');
+        
         if(!( $del_features&&$del_facilities)){
             $flag=0;
         }
-        $q2="INSERT INTO `rooms_facilities`(`room_id`, `facilities_id`) VALUES (?,?)";
+        $q2="INSERT INTO `room_facilities`( `room_id`, `facilities_id`) VALUES (?,?)";
         if($stmt=mysqli_prepare($con,$q2)){
             foreach($facilities as $f){
                 mysqli_stmt_bind_param($stmt,'ii',$frm_data['room_id'],$f);

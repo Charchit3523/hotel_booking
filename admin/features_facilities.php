@@ -216,7 +216,11 @@ function rem_feature(val){
         if (this.responseText == 1) {
             alert('success', 'Feature removed');
             get_features();
-        } else {
+        } 
+        else if(this.responseText == 'room_added') {
+            alert('feature is added in a room');
+        }
+        else {
             alert('error', 'Server error');
         }
     };

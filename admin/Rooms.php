@@ -220,7 +220,7 @@ adminLogin();
                                 <label class="form-label">Description</label>
                                 <textarea name="desc" rows="4" class="form-control shadow-none"required></textarea>
                             </div>
-                            <input type="hidden" name="room_id"  id="room_id">
+                            <input type="hidden" name="room_id">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -286,7 +286,7 @@ adminLogin();
                     var myModal = document.getElementById('add-room');
                     var modal = new bootstrap.Modal(myModal);
                     modal.hide();
-                    console.log(xhr.responseText);
+                    // console.log(xhr.responseText);
 
                     if (xhr.responseText.trim() === '1') {
                         alert('success', 'New room added!');
@@ -326,6 +326,7 @@ adminLogin();
         
 
          function edit_details(id){
+            console.log(id);
             let xhr = new XMLHttpRequest();
             xhr.open("POST", "ajax/rooms.php", true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -339,9 +340,10 @@ adminLogin();
 
             edit_room_form.elements['adult'].value=data.roomdata.adult;
             edit_room_form.elements['children'].value=data.roomdata.children;
-            console.log(edit_room_form.elements['desc'].value=data.roomdata.desc);
-            edit_room_form.elements['desc'].value=data.roomdata.desc;
-            edit_room_form.elements['room_id'].value=data.roomdata.room_id;
+            
+            edit_room_form.elements['desc'].value=data.roomdata.description;
+            edit_room_form.elements['room_id'].value = data.roomdata.id;
+
 
             edit_room_form.elements['facilities'].forEach(el => {
                     if (data.facilities.includes(Number(el.value))) {
@@ -360,8 +362,8 @@ adminLogin();
             xhr.onerror = function() {
                 console.error('Request failed');
             };
-            xhr.send('get_room=' + id );
- }
+            xhr.send('get_room=' + id);
+         }
          function toggle_status(id, val) {
             let xhr = new XMLHttpRequest();
             xhr.open("POST", "ajax/rooms.php", true);
@@ -377,7 +379,7 @@ adminLogin();
             };
 
             // Correct the query string format
-            xhr.send('toggle_status=' + id + '&value=' + val); // Corrected the '=' sign here
+            hr.send('toggle_status=' + id + '&value=' + val); // Corrected the '=' sign here
         }
         let edit_room_form =document.getElementById('edit_room_form');
         edit_room_form.addEventListener('submit',function(e){
@@ -409,6 +411,7 @@ adminLogin();
             edit_room_form.querySelectorAll('input[name="facilities"]').forEach(el => {
                 if (el.checked) {
                     facilities.push(el.value);
+                    console.log(el.value);
                 }
             });
 
@@ -423,10 +426,9 @@ adminLogin();
 
             xhr.onload = function() {
                 if (xhr.status >= 200 && xhr.status < 300) {
-                    var myModal = document.getElementById('editroom');
-                    var modal = new bootstrap.Modal(myModal);
-                    modal.hide();
-                    console.log(xhr.responseText);
+                    
+                   
+                    
 
                     if (xhr.responseText.trim() === '1') {
                         alert('success', 'roomdata edited');
