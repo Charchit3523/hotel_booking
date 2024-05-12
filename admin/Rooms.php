@@ -244,7 +244,7 @@ adminLogin();
                   <div class="border-bottom border-3 pb-3 mb-3">
                     <form id="add_image_form">
                         <label class="form-label fw-bold" >Add Image</label>
-                        <input type="file" name="image" accept=".jpg , .pngn , .webp , .jpeg" class="form-control shadow-none mb-3" required>
+                        <input type="file" name="image" accept=".jpg , .png , .webp , .jpeg" class="form-control shadow-none mb-3" required>
                         <button  class="btn custom-bg text-white shadow-none">Add</button>
                         <input type="hidden" name="room_id">                    
                     </form>
@@ -435,22 +435,30 @@ adminLogin();
             data.append('adult', edit_room_form.elements['adult'].value);
             data.append('children', edit_room_form.elements['children'].value);
             data.append('desc', edit_room_form.elements['desc'].value);
-
             let features = [];
-            edit_room_form.querySelectorAll('input[name="features"]').forEach(el => {
-                if (el.checked) {
-                    features.push(el.value);
-                    console.log(el.value);
-                }
-            });
+            let featureCheckboxes = edit_room_form.querySelectorAll('input[name="features"]');
+            if (featureCheckboxes) {
+                Array.from(featureCheckboxes).forEach(el => {
+                    if (el.checked) {
+                        features.push(el.value);
+                        console.log(el.value);
+                    }
+                });
+            }
 
             let facilities = [];
-            edit_room_form.querySelectorAll('input[name="facilities"]').forEach(el => {
-                if (el.checked) {
-                    facilities.push(el.value);
-                    console.log(el.value);
-                }
-            });
+            let facilityCheckboxes = edit_room_form.querySelectorAll('input[name="facilities"]');
+            if (facilityCheckboxes) {
+                Array.from(facilityCheckboxes).forEach(el => {
+                    if (el.checked) {
+                        facilities.push(el.value);
+                        console.log(el.value);
+                    }
+                });
+            }
+
+
+
 
             data.append('features', JSON.stringify(features));
             data.append('facilities', JSON.stringify(facilities));
