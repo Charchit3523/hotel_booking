@@ -162,7 +162,7 @@
 
         if(isset($_POST['updatepassword'])){
             $pass=password_hash($_POST['Password'],PASSWORD_BCRYPT);
-            $update="UPDATE `user` SET `password`='$pass',`resettoken`= NULL,`resettokenexpire`= NULL WHERE `email`='{$_POST['email']}'";
+            $update="UPDATE `user` SET `password`='$pass', `cpassword`='$pass',``resettoken`= NULL,`resettokenexpire`= NULL WHERE `email`='{$_POST['email']}'";
             if(mysqli_query($con,$update)){
                 echo "<script> alert('Password Updated Successfully');
                 window.location.href='login.php';</script>";
