@@ -58,26 +58,30 @@ if(isset($_POST['reset_pass'])){
            
             if(mysqli_query($con,$q) && send_mail($_POST['email'],$reset_token)){
                 echo
-                "<script> alert('Password reset link sent to email');</script>
+                "<script> alert('Password reset link sent to email');
+                window.location.href='login.php';</script>
                 ";
             }
             else{
                 echo
-                "<script> alert('server down try later');</script>
+                "<script> alert('server down try later');
+                window.location.href='login.php';</script>
                 ";
             }
         
         }
         else{
             echo
-            "<script> alert('Email not found');</script>
+            "<script> alert('Email not found');
+            window.location.href='login.php';</script>
             ";
            
         }
     }
     else{
         echo
-        "<script> alert('error querry');</script>
+        "<script> alert('error querry');
+        window.location.href='login.php';</script>
         ";
         
     }

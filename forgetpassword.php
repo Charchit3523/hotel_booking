@@ -110,25 +110,25 @@
 </head>
 <body>
 
-<div class="signup-form ">
+    <div class="signup-form ">
+        <form method="POST" action="checkforpass.php">
+            <h1 class="me-3"><img src="images/carousel/logo.png" width="70px">Hotel Booking</h1>
+            <hr>
+            <h2 class="mt-4">Reset Password</h2>
+            <p class="hint-text mt-3">Enter your email id </p>
+            
+            <div class="form-group">
+                <input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" name="reset_pass" class="btn text-white shadow-none custom-bg">Reset</button>
+                <button type="reset" class="btn text-secondary shadow-none ms-6 mb-2" data-bs-dismiss="modal">Cancel</button><br><br>
+                
+            </div>
+            <div class="message"></div>
+        </form>
 
-	
-    <form method="POST" action="checkforpass.php">
-		<h1 class="me-3"><img src="images/carousel/logo.png" width="70px">Hotel Booking</h1>
-		<hr>
-		<h2 class="mt-4">Reset Password</h2>
-		<p class="hint-text mt-3">Enter your email id </p>
-         
-        <div class="form-group">
-        	<input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
-        </div>
-		
-		<div class="form-group">
-            <button type="submit" name="reset_pass" class="btn text-white shadow-none custom-bg">Reset</button>
-			<button type="reset" class="btn text-secondary shadow-none ms-6 mb-2" data-bs-dismiss="modal">Cancel</button><br><br>
-			
-        </div>
-		<div class="message"></div>
-    </form>
-	
-</div>
+    </div>
+</body>
+</html
