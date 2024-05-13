@@ -1,9 +1,13 @@
 <?php
+require('admin/inc/db_config.php');
+require('admin/inc/essentials.php');
+
 session_start();
 if(!isset($_SESSION['IS_LOGIN'])){
 	header('location:login.php');
 	die();
 }
+
 ?>
 
 

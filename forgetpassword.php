@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
-<title>Login Form</title>
+<title>forgot password Form</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
 <?php require('inc/links.php')?>
@@ -112,49 +113,22 @@
 <div class="signup-form ">
 
 	
-    <form method="post">
+    <form method="POST" action="checkforpass.php">
 		<h1 class="me-3"><img src="images/carousel/logo.png" width="70px">Hotel Booking</h1>
 		<hr>
-		<h2 class="mt-4">Login</h2>
-		<p class="hint-text mt-3">Enter your email id and password.</p>
+		<h2 class="mt-4">Reset Password</h2>
+		<p class="hint-text mt-3">Enter your email id </p>
          
         <div class="form-group">
-        	<input type="email" class="form-control" name="email" id="email" placeholder="Email">
-        </div>
-		<div class="form-group">
-            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+        	<input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
         </div>
 		
 		<div class="form-group">
-            <button type="button" class="btn text-white shadow-none custom-bg" onclick="login_now()">Login Now</button>
+            <button type="submit" name="reset_pass" class="btn text-white shadow-none custom-bg">Reset</button>
 			<button type="reset" class="btn text-secondary shadow-none ms-6 mb-2" data-bs-dismiss="modal">Cancel</button><br><br>
-			<a href="forgetpassword.php" class="pass  mt-3">Forgot password</a>
+			
         </div>
 		<div class="message"></div>
     </form>
-	<div class="text-center">Create a account? <a href="registration.php">Sign up</a></div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
-<script>
-function login_now(){
-	var email=jQuery('#email').val();
-	var password=jQuery('#password').val();
 	
-	jQuery.ajax({
-		url:'login_check.php',
-		type:'post',
-		data:'email='+email+'&password='+password,
-		success:function(result){
-			if(result=='done'){
-				window.location.href='dashboard.php';
-			}
-			jQuery('.message').html(result);
-		}
-	});
-}
-
- 
-</script>
-</body>
-</html>                            
+</div>
