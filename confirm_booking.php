@@ -80,7 +80,7 @@
       <div class="col-lg-5 col-md-12 px-4">
         <div class="card mb-4 border-0 shadow-sm rounded-3">
           <div class="card-body">
-            <form action="#" id="booking_form">
+            <form action="pay_now.php" method="POST" id="booking_form">
               <h6 class="mb-3">Booking details</h6>
               <div class="row">
                 <div class="col-md-6 mb-3">
@@ -129,11 +129,64 @@
 <?php require('inc/footer.php')?>
 
 <script>
-  let booking_form=document.getElementBYId('booking_form');
-  let info_loader=document.getElementBYId('info_loader');
-  let pay_info=document.getElementBYId('pay_info');
+  let booking_form=document.getElementById('booking_form');
+  let info_loader=document.getElementById('info_loader');
+  let pay_info=document.getElementById('pay_info');
 
   function check_availability(){
+    let checkin_val=booking_form.elements['checkin'].value;
+    let checkout_val=booking_form.elements['checkout'].value;
+
+
+  booking_form.elements['pay_now'].setAttribute('disabled',true);
+
+  if(checkin_val!='' && checkout_val!='' ){
+    pay_info.classList.add('d-none');
+    pay_info.classList.replace('text-dark','text-secondary');
+
+    info_loader.classList.remove('d-none');
+
+    let data= new FormData();
+    data.append('check_availability','');
+    data.append('check_in',checkin_val);
+
+    data.append('check_out',checkout_val);
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "ajax/confirm_booking.php", true);
+    
+    xhr.onload = function() {
+      // console.log(this.responseText);
+        let data=JSON.parse(this.responseText);
+        if(data.status=='check_in_out_equal'){
+          pay_info,inner="you cannot check-out on the same day";
+        }
+        else if(data.status=='check_out_earlier'){
+          pay_info,inner="you cannot check-out earlier than check-in date";
+        }
+        else if(data.status=='check_in_earlier'){
+          pay_info,inner="you cannot check-in earlier than today's date";
+        }
+        else if(data.status=='inavailable'){
+          pay_info,inner="Room not available for this check in date";
+        }
+        else{
+          pay_info.innerHTML="No. of days:"+data.days+"<br>Total Amount to pay: Rs." +data.payment;
+          pay_info.classList.replace('text-secondary','text-dark');
+          booking_form.elements['pay_now'].removeAttribute('disabled');
+        }
+
+        pay_info.classList.remove('d-none');
+        info_loader.classList.add('d-none');
+ 
+    };
+
+    
+    xhr.send(data);
+
+
+  }
+
 
   }
 
