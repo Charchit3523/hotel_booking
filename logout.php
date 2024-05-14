@@ -1,5 +1,9 @@
 <?php
-unset($_SESSION['IS_LOGIN']);
-header('location:login.php');
-die();
+   
+   
+    require('admin/inc/essentials.php');
+    session_start();
+    session_destroy();
+    redirect('index.php');
+
 ?>

@@ -34,22 +34,47 @@ $contact_r = mysqli_fetch_assoc(select( $contact_q,$values,'i'));
         </li>  
         </ul>
         <div class="d-flex">
-        <button onclick="redirect('login.php')" id="login" type="button" class="btn btn-outline-dark shadow-none me-lg-3 me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Login
-        </button>
-        <script type="text/javascript">
-            document.getElementById("login").onclick = function () {
-                location.href = "login.php";
-            };
-        </script>
-        <button type="button" id="register" class="btn btn-outline-dark shadow-none me-lg-2 me-3" data-bs-toggle="modal" data-bs-target="#registerModal">
-            Register
-        </button>   
-        <script type="text/javascript">
-            document.getElementById("register").onclick = function () {
-                location.href = "registration.php";
-            };
-        </script>      
+         <?php
+            session_start();
+            if(isset($_SESSION['IS_LOGIN'])){
+                echo<<<data
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-dark shadow none dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                    <i class="bi bi-person"></i>
+                    {$_SESSION['u_name'] }
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-lg-end">
+                        <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                        <li><a class="dropdown-item" href="bookings.php">Bookings</a></li>
+                        <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                    </ul>
+                </div>
+
+                data;
+            }
+            else{
+                echo<<<data
+                <button onclick="redirect('login.php')" id="login" type="button" class="btn btn-outline-dark shadow-none me-lg-3 me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    Login
+                </button>
+                <script type="text/javascript">
+                    document.getElementById("login").onclick = function () {
+                        location.href = "login.php";
+                    };
+                </script>
+                <button type="button" id="register" class="btn btn-outline-dark shadow-none me-lg-2 me-3" data-bs-toggle="modal" data-bs-target="#registerModal">
+                    Register
+                </button>   
+                <script type="text/javascript">
+                    document.getElementById("register").onclick = function () {
+                        location.href = "registration.php";
+                    };
+                </script>   
+                data;
+            }
+            
+         ?>   
+           
         </div>
     </div>
     </div>

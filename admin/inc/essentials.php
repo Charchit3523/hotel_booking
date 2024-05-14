@@ -22,6 +22,8 @@ define('ROOMS_FOLDER','rooms/');
         }
         
     }
+
+    
     function redirect($url){
         echo"<script>
                 window.location.href='$url';

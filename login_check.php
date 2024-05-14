@@ -8,13 +8,15 @@ if(isset($_POST['email']) && $_POST['password']){
 	$check=mysqli_num_rows($res);
 	$u_fetch=mysqli_fetch_assoc($res);
 	if($check>0){
-			echo "done";
+			
 			$_SESSION['IS_LOGIN']=1;
 			$_SESSION['u_id']=$u_fetch['sr_no'];
 			$_SESSION['u_name']=$u_fetch['name'];
+			$_SESSION['u_phone']=$u_fetch['pn'];
+			echo "done";
 		}
 	}else{
-		echo"Please enter corect login details";
+		echo "Please enter corect login details";
 	}
 
 ?>

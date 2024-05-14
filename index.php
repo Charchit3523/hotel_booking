@@ -130,7 +130,12 @@
                 $thumb_res=mysqli_fetch_assoc($thumb_q);
                 $room_thumb=ROOMS_IMG_PATH.$thumb_res['image'];
               }
-
+              $login=0;
+              if(isset($_SESSION['IS_LOGIN'])){
+                $login=1;
+              }
+              $book_btn="<button onclick='checkLoginToBook($login,$room_data[id])' class='btn btn-sm text-white custom-bg shadow-none'>Book now</button>";
+                         
               //print room
               echo <<<data
                   <div class="col-lg-4 col-mb-6 my-3">        
@@ -170,8 +175,8 @@
                           </span>               
                         </div>
                         <div class="d-flex justify-content-evenly mb-2">             
-                        <a href="#" class="btn btn-sm text-white custom-bg shadow-none">Book now</a>
-                        <a href="room_details.php?id=$room_data[id]" class="btn btn-sm btn-outline-dark shadow-none">More details</a>  
+                        $book_btn 
+                        <a href="room_details.php?id=$room_data[id]"  class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">More details</a>  
                         </div>             
                     </div>
                   </div>
@@ -190,7 +195,7 @@
       ?>
          
           <div class="col-lg-12 text-center mt-5">
-            <a href="rooms.php" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">More rooms>>></a>
+            <a href="rooms.php"  class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">More rooms>>></a>
           </div>
       </div>
     </div>

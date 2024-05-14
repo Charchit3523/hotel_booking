@@ -147,7 +147,7 @@ function login_now(){
 		data:'email='+email+'&password='+password,
 		success:function(result){
 			if(result=='done'){
-				window.location.href='dashboard.php';
+				window.location.href='index.php';
 			}
 			jQuery('.message').html(result);
 		}

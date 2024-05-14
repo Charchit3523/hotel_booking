@@ -131,7 +131,7 @@
                             <h1 class='me-3'><img src='images/carousel/logo.png' width='70px'>Hotel Booking</h1>
                             <hr>
                             <h2 class='mt-4'>Update Password</h2>
-                            <p class='hint-text mt-3'>Enter your email id </p>
+                            <p class='hint-text mt-3'>Enter your new password</p>
                             
                             <div class='form-group'>
                                 <input type='password' class='form-control' placeholder='New Password' name='Password'required>
