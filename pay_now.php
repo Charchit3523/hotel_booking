@@ -24,3 +24,33 @@
 
 
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<?php require('inc/links.php')?>
+   
+    
+<div class="col-lg-5 col-md-12 px-4">
+        <div class="card mb-4 border-0 shadow-sm rounded-3">
+          <div class="card-body">
+            <form action="pay_response.php" method="POST" id="payment_form">
+              <h6 class="mb-3">Payment</h6>
+              <div class="row">
+               
+                  <img src="payment.png" alt="">
+                  <button name="pay" class="btn text-white custom-bg shadow-none mb-1" >Pay now</button>
+                
+                </div>
+                
+              </div> 
+            </form>
+          </div>
+        </div>
+      </div>
+</body>
+</html>
