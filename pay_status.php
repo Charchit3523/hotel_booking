@@ -6,10 +6,6 @@
     <title>Hotel Booking System-BookingStatus</title>
     
   <?php require('inc/links.php')?>
- 
-    
-   
-   
 </head>
 <body class="bg-light">
    <?php require('inc/header.php')?>
@@ -19,26 +15,7 @@
       redirect('index.php');
     }
    
-    // $data=filteration($_GET);
-    // $room_res=select("SELECT * FROM `rooms` WHERE `id`=? AND `satus`=? AND `removed`=?",[$data['id'],1,0],'iii');
-    
-    // if(mysqli_num_rows($room_res)==0){
-    //   redirect('rooms.php');
-    // }
-    // $room_data=mysqli_fetch_assoc($room_res);
-
-    // $_SESSION['room']=[
-    //   "id"=>$room_data['id'],
-    //   "name"=>$room_data['name'],
-    //   "price"=>$room_data['price'],
-    //   "payment"=>null,
-    //   "available"=>false,
-    // ];
-    // $user_res=select("SELECT * FROM `user` WHERE `sr_no`=? LIMIT 1",[$_SESSION['u_id']],"i");
-    // $user_data=mysqli_fetch_assoc( $user_res);
 ?>
-
-  
   <div class="container">
     <div class="row">
       <div class="col-12 my-5 mb- px-4">
@@ -69,40 +46,28 @@
               </div>
 
           data;
-
-
         }
         else{
           
           echo<<<data
-          <div class="col-12 px-4">
-            <p class="fw-bold alert alert-success">
-            <i class="bi bi-exclamation-triangle-fill"></i>
-             Payment failed! Booking unsuccessful!
-             <br><br>
-             <a href='bookings.php'>Go to bookings</a>
-            </p>
-          </div>
+            <div class="col-12 px-4">
+              <p class="fw-bold alert alert-success">
+              <i class="bi bi-exclamation-triangle-fill"></i>
+              Payment failed! Booking unsuccessful!
+              <br><br>
+              <a href='bookings.php'>Go to bookings</a>
+              </p>
+            </div>
 
-      data;
+           data;
 
 
         }
       
       ?>
-
-   
-
-      
-      
     </div>
 </div>
 
 <?php require('inc/footer.php')?>
-
-    
-
-
-
 </body>
 </html> 
