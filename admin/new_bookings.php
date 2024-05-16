@@ -27,7 +27,7 @@ adminLogin();
                <div class="card  border-0 shadow-sm mb-4">
                     <div class="card-body">
                         <div class="table-responsive-md" style="height:450px; overflow-y: scroll;">
-                            <table class="table table-hover border "style="height:450px; overflow-y: scroll;>
+                            <table class="table table-hover border ">
                                 <thead class="sticky-top">
                                     <tr class="bg-dark text-light">
                                     <th scope="col">#</th>

@@ -28,7 +28,7 @@
         }
         $booking_q="SELECT  bo.*, bd.*  FROM`booking_order` bo INNER JOIN `booking_details` bd ON bo.booking_id=bd.booking_id WHERE bo.user_id=? AND bo.booking_status!=?";
         
-      $booking_res=select($booking_q,[$_SESSION['u_id'],'pending'],'is');
+      $booking_res=select($booking_q,[$_SESSION['u_id'],'booked'],'is');
       if(mysqli_num_rows($booking_res)==0){
         redirect('index.php');
       }
@@ -53,7 +53,7 @@
             <div class="col-12 px-4">
               <p class="fw-bold alert alert-success">
               <i class="bi bi-exclamation-triangle-fill"></i>
-              Payment failed! Booking unsuccessful!
+              Payment done! Booking successful!
               <br><br>
               <a href='bookings.php'>Go to bookings</a>
               </p>

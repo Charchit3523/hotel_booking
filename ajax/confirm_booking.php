@@ -31,14 +31,31 @@
 
         //check booking availability
 
+
         if($status!=''){
             echo $result;
         }
         else{
             session_start();
-            $_SESSION['room'];
+           
             
             //run query
+            $tb_query="SELECT COUNT(*) AS `total_bookings` FROM `booking-order` WHERE booking_status=? AND room_id=? AND check_out>? AND check_in < ? ";
+            
+            $values=['booked',$_SESSION['room']['id'],$frm_data['check_in'],$frm_data['check_out']];
+
+            $tb_fetch=mysqli_fetch_assoc(select($tb_query,$values,'siss'));
+
+            $rq_result=select("SELECT `quantity` FROM `rooms` WHERE `sr_no`=?"[$_SESSION[`room`][`id`]],'i');
+            $rq_fetch=mysqli_fetch_assoc($rq_result);
+
+
+            if(($rq_fetch['quantity']-$tb_fetch['total_bookings'])==0){
+                    $status='unavailable';
+                    $result=json_encode(['status'=>$status]);
+                    echo $result;
+                    exit;
+            }
 
             $count_days = date_diff($checkin_date, $checkout_date)->days;
             $payment = $_SESSION['room']['price'] * $count_days;
