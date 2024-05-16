@@ -156,19 +156,20 @@
     xhr.open("POST", "ajax/confirm_booking.php", true);
     
     xhr.onload = function() {
-      // console.log(this.responseText);
+      console.log(this.responseText);
         let data=JSON.parse(this.responseText);
+
         if(data.status=='check_in_out_equal'){
-          pay_info,inner="you cannot check-out on the same day";
+          pay_info.innerHTML="you cannot check-out on the same day";
         }
         else if(data.status=='check_out_earlier'){
-          pay_info,inner="you cannot check-out earlier than check-in date";
+          pay_info.innerHTML="you cannot check-out earlier than check-in date";
         }
         else if(data.status=='check_in_earlier'){
-          pay_info,inner="you cannot check-in earlier than today's date";
+          pay_info.innerHTML="you cannot check-in earlier than today's date";
         }
         else if(data.status=='inavailable'){
-          pay_info,inner="Room not available for this check in date";
+          pay_info.innerHTML="Room not available for this check in date";
         }
         else{
           pay_info.innerHTML="No. of days:"+data.days+"<br>Total Amount to pay: Rs." +data.payment;
