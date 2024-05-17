@@ -40,7 +40,7 @@ $contact_r = mysqli_fetch_assoc(select( $contact_q,$values,'i'));
                 echo<<<data
                 <div class="btn-group">
                     <button type="button" class="btn btn-outline-dark shadow none dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
-                    <i class="bi bi-person"></i>
+                    <i class="bi bi-person-square  me-2" ></i>
                     {$_SESSION['u_name'] }
                     </button>
                     <ul class="dropdown-menu dropdown-menu-lg-end">

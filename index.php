@@ -136,6 +136,25 @@
               }
               $book_btn="<button onclick='checkLoginToBook($login,$room_data[id])' class='btn btn-sm text-white custom-bg shadow-none'>Book now</button>";
                          
+              $rating_q="SELECT AVG(rating) AS `avg_rating` FROM `rating_review`
+              WHere `room_id`='$room_data[id]' ORDER BY `sr_no` DESC LIMIT 20";
+              $rating_res=mysqli_query($con,$rating_q);
+              $rating_fetch=mysqli_fetch_assoc($rating_res);
+              $rating_data="";
+              if( $rating_fetch['avg_rating']!=NULL){
+                $rating_data="<div class='rating mb-4'>
+                              <h6 class='mb-1'>Rating</h6>
+                              <span class ='badge rounded-pill bg-light'>";
+
+
+                for($i=0;$i<$rating_fetch['avg_rating']; $i++){
+                  $rating_data.="<i class='bi bi-star-fill text-warning'></i> ";
+                }
+                $rating_data.=" </span>               
+                              </div>";
+              }
+             
+
               //print room
               echo <<<data
                   <div class="col-lg-4 col-mb-6 my-3">        
@@ -156,24 +175,16 @@
                           
                         </div>
                         <div class="Guests mb-3">
-                        <h6 class="mb-1">Guests</h6>
-                          <span class="badge rounded-pill bg-light text-dark  text-wrap ">
-                          {$room_data['adult']} Adults
-                          </span>
-                          <span class="badge rounded-pill bg-light text-dark  text-wrap " >
-                          {$room_data['children']} children
-                          </span>
+                          <h6 class="mb-1">Guests</h6>
+                            <span class="badge rounded-pill bg-light text-dark  text-wrap ">
+                            {$room_data['adult']} Adults
+                            </span>
+                            <span class="badge rounded-pill bg-light text-dark  text-wrap " >
+                            {$room_data['children']} children
+                            </span>
                         
-                      </div>
-                        <div class="rating mb-4">
-                        <h6 class="mb-1">Rating</h6>
-                          <span class ="badge rounded-pill bg-light">
-                            <i class="bi bi-star text-warning"></i>
-                            <i class="bi bi-star text-warning"></i>
-                            <i class="bi bi-star text-warning"></i>
-                            <i class="bi bi-star text-warning"></i>
-                          </span>               
                         </div>
+                        $rating_data
                         <div class="d-flex justify-content-evenly mb-2">             
                         $book_btn 
                         <a href="room_details.php?id=$room_data[id]"  class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">More details</a>  
@@ -231,54 +242,38 @@
      <div class="container">
       <div class="swiper swiper_testimonials">
       <div class="swiper-wrapper mb-5">
-        <div class="swiper-slide bg-white p-4">
-          <div class="profile d-flex align-items-center mb-3">
-            <img src="images/facilities/wifi.svg" width="30px">
-            <h6 class="m-0 ms-2 ">Random user</h6>
-            
-          </div>
-          
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eius minus vel, totam nam nemo eos corrupti nostrum molestias et esse?</p>
-        <div class="rating">
-          <i class="bi bi-star text-warning"></i>
-          <i class="bi bi-star text-warning"></i>
-          <i class="bi bi-star text-warning"></i>
-          <i class="bi bi-star text-warning"></i>
-        </div>
-        </div>
-        <div class="swiper-slide bg-white p-4">
-          <div class="profile d-flex align-items-center mb-3">
-            <img src="images/facilities/wifi.svg" width="30px">
-            <h6 class="m-0 ms-2 ">Random user</h6>
-            
-          </div>
-          
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eius minus vel, totam nam nemo eos corrupti nostrum molestias et esse?</p>
-        <div class="rating">
-        <i class="bi bi-star text-warning"></i>
-        <i class="bi bi-star text-warning"></i>
-        <i class="bi bi-star text-warning"></i>
-        <i class="bi bi-star text-warning"></i>
-        </div>
-        </div>
-        <div class="swiper-slide bg-white p-4">
-          <div class="profile d-flex align-items-center mb-3">
-            <img src="images/facilities/wifi.svg" width="30px">
-            <h6 class="m-0 ms-2 ">Random user</h6>
-            
-          </div>
-          
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eius minus vel, totam nam nemo eos corrupti nostrum molestias et esse?</p>
-        <div class="rating">
-        <i class="bi bi-star text-warning"></i>
-        <i class="bi bi-star text-warning"></i>
-        <i class="bi bi-star text-warning"></i>
-        <i class="bi bi-star text-warning"></i>
-        </div>
-        </div>
+        <?php
+          $review_q="SELECT rr.*,uc.name AS uname, r.name AS rname FROM `rating_review` rr 
+          INNER JOIN `user` uc ON rr.user_id=uc.sr_no  
+          INNER JOIN `rooms` r On rr.room_id=r.id 
+          ORDER BY `sr_no` DESC LIMIT 6";
 
-    
-        
+          $review_res=mysqli_query($con,$review_q);
+          if(mysqli_num_rows($review_res)==0){
+              echo 'No reviews yet';
+          }
+          else{
+            while($row=mysqli_fetch_assoc($review_res)){
+              $stars="<i class='bi bi-star-fill text-warning'></i> ";
+              for($i=1;$i<$row['rating'];$i++){
+                $stars.=" <i class='bi bi-star-fill text-warning'></i>";
+              }
+              echo <<<slides
+              <div class="swiper-slide bg-white p-4">
+                  <div class="profile d-flex align-items-center mb-3">
+                      <i class="bi bi-person-square fs-3 me-2" width="30px"></i>
+                      <h6 class="m-0 ms-2">$row[uname]</h6>
+                  </div>
+                  <p>$row[review]</p>
+                  <div class="rating">
+                      $stars
+                     
+                  </div>
+              </div>
+              slides;
+            }
+          }
+        ?>
     </div>
     <div class="swiper-pagination"></div>
   </div>
@@ -312,15 +307,15 @@
               <div class="bg-white p-4 rounded mb-4">
                 <h5>Follow Us</h5>
                 <?php
-                if ($contact_r['tw'] != '') {
-                    echo <<<data
-                    <a href="{$contact_r['tw']}" class="d-inline-block mb-3">  
-                        <span class="badge bg-light text-dark fs-6 p-2">
-                            <i class="bi bi-twitter-x me-1"></i> Twitter
-                        </span>
-                    </a>
-                    data;
-                }
+                  if ($contact_r['tw'] != '') {
+                      echo <<<data
+                      <a href="{$contact_r['tw']}" class="d-inline-block mb-3">  
+                          <span class="badge bg-light text-dark fs-6 p-2">
+                              <i class="bi bi-twitter-x me-1"></i> Twitter
+                          </span>
+                      </a>
+                      data;
+                  }
                 ?>              
                 <br>
                 <a href="<?php echo $contact_r['fb']?>" class="d-inline-block mb-3 ">  
