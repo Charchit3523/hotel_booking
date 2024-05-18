@@ -35,7 +35,10 @@
         </div>
       </div>
       <?php
-     $q = "SELECT bo.*, bd.* FROM `booking_order` bo INNER JOIN `booking_details` bd ON bo.booking_id=bd.booking_id WHERE ((bo.booking_status = 'booked') OR (bo.booking_status = 'cancelled')) AND (bo.user_id=?) ORDER BY bo.booking_id DESC";
+     $q = "SELECT bo.*, bd.* FROM `booking_order` bo 
+     INNER JOIN `booking_details` bd ON bo.booking_id=bd.booking_id 
+     WHERE ((bo.booking_status = 'booked') OR (bo.booking_status = 'cancelled')) 
+     AND (bo.user_id=?) ORDER BY bo.booking_id DESC";
      $result = select($q, [$_SESSION['u_id']], 'i');
      
      while ($data = mysqli_fetch_assoc($result)) {
@@ -46,9 +49,9 @@
           $btn = "";
           if ($data['booking_status'] == 'booked') {
               $status_bg = 'bg-success';
-              $btn = "<a href='generate_pdf.php?gen_pdf&id=$data[booking_id]' class='btn btn-dark btn-sm shadow-none'>
+              $btn = "<a href='generate_pdf.php?gen_pdf&id=$data[booking_id]' class='btn btn-dark btn-sm shadow-none me-2'>
                       Booking Receipt
-              //         </a>";
+                    </a>";
               if($data['rate_review']==0){
                 $btn .=" <button  type='button' onclick='review_room($data[booking_id],$data[room_id])' class=' btn btn-dark btn-sm shadow-none md-mt-2'  data-bs-toggle='modal' data-bs-target='#reviewModal'>
                   Rate and Review 

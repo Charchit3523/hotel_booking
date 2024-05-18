@@ -7,14 +7,14 @@
       if(!(isset($_SESSION['IS_LOGIN']))){
         redirect('index.php');
       }
-
+     
       if(isset($_POST['pay_now'])){
-
+        $order_id = 'ORD_'.$_SESSION['u_id'].random_int(11111, 999999999);
         // insert ddata into database
-
+       
         $form_data=filteration($_POST);
-        $q1="INSERT INTO `booking_order`(`user_id`, `room_id`, `check_in`, `check_out` ) VALUES (?,?,?,?)";
-        insert($q1,[$_SESSION['u_id'],$_SESSION['room']['id'],$form_data['checkin'],$form_data['checkout']],'isss');
+        $q1="INSERT INTO `booking_order`(`user_id`, `room_id`, `check_in`, `check_out`,`order_id`) VALUES (?,?,?,?,?)";
+        insert($q1,[$_SESSION['u_id'],$_SESSION['room']['id'],$form_data['checkin'],$form_data['checkout'], $order_id ],'issss');
         
         $booking_id=mysqli_insert_id($con);
         $q2="INSERT INTO `booking_details`( `booking_id`, `room_name`, `price`, `total_pay`, `user_name`, `phonenumber`, `address`) VALUES (?,?,?,?,?,?,?)";

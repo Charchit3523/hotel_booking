@@ -8,7 +8,7 @@ if (!isset($_SESSION['IS_LOGIN'])) {
     redirect('index.php');
 }
 
-$q1 = "SELECT `booking_id`,`user_id` FROM `booking_order` WHERE `room_id`={$_SESSION['room']['id']}";
+$q1 = "SELECT `booking_id`,`user_id` FROM `booking_order` WHERE `room_id`={$_SESSION['room']['id']} ORDER BY `booking_id` DESC LIMIT 1";
 $res = mysqli_query($con, $q1);
 
 // Check if the query was successful
