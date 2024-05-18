@@ -51,23 +51,26 @@
               $status_bg = 'bg-success';
               $btn = "<a href='generate_pdf.php?gen_pdf&id=$data[booking_id]' class='btn btn-dark btn-sm shadow-none me-2'>
                       Booking Receipt
-                    </a>";
+                    </a>
+                    
+                    <button type='button' onclick='cancel_booking($data[booking_id])' class='btn btn-sm btn-danger shadow-none ms'>
+                    Cancel
+                </button>
+                ";
               if($data['rate_review']==0){
-                $btn .=" <button  type='button' onclick='review_room($data[booking_id],$data[room_id])' class=' btn btn-dark btn-sm shadow-none md-mt-2'  data-bs-toggle='modal' data-bs-target='#reviewModal'>
+                $btn .=" <button  type='button' onclick='review_room($data[booking_id],$data[room_id])' class=' btn btn-dark btn-sm shadow-none mt-2'  data-bs-toggle='modal' data-bs-target='#reviewModal'>
                   Rate and Review 
                 </button>";
               }
               
-              $btn .="<button type='button' onclick='cancel_booking($data[booking_id])' class='btn btn-sm btn-danger shadow-none ms '>
-                Cancel
-              </button>";
+              
                       // if($data['rate_review']==0){
                       //   $btn .=" <button class='btn btn-dark btn-sm shadow-none mt-2'>
                       //     Rate and Revirew
                       //   </button>";
                       // }
                       
-          } elseif ($data['booking_status'] == 'cancelled') {
+          } else if ($data['booking_status'] == 'cancelled') {
               $status_bg = 'bg-danger';
       
               if ($data['refund'] == 0) {
@@ -164,6 +167,8 @@
 
      <script>
        function cancel_booking(id) {
+        console.log('Cancel button clicked. Booking ID:', id);
+        
             if (confirm('Are you sure you want to cancel booking?')) {
                 console.log('Cancelling booking with ID:', id); // Debug statement
                 let xhr = new XMLHttpRequest();
@@ -171,7 +176,8 @@
                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
                 xhr.onload = function() {
-                    console.log('Response:', this.responseText); // Debug statement
+                  console.log('Response:', xhr.responseText); // Use xhr directly instead of this
+                
                     if (this.responseText == 1) {
                         console.log('Cancellation successful'); // Debug statement
                         window.location.href = "bookings.php?cancel_status=true";

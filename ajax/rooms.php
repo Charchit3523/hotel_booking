@@ -28,16 +28,22 @@ if(isset($_GET['fetch_rooms'])){
             exit;
         }
     }
+
+    $guests= json_decode($_GET['guests'],true);
+    $adults=($guests['adults']!='') ? $guests['adults'] : 0;
+    $childrens=($guests['childrens']!='') ? $guests['childrens'] : 0;
+
+    $facility_list=json_decode($_GET['facility_list'],true);
     //count no of rooms store room cards on output variable
     $count_rooms=0;
     $output="";
-    $room_res=select("SELECT * FROM `rooms` WHERE `satus`=? AND `removed`=?",[1,0],'ii');
+    $room_res=select("SELECT * FROM `rooms` WHERE `adult`>=? AND `children`>=? AND `satus`=? AND `removed`=?",[$adults,$childrens,1,0],'iiii');
 
 
     while($room_data=mysqli_fetch_assoc($room_res))
     {     
 
-
+            // check availability
         if($chk_avail['checkin']!='' && $chk_avail['checkout']!=''){
               // Query to count total bookings for the room within the specified date range
                 $tb_query = "SELECT COUNT(*) AS total_bookings FROM booking_order 
@@ -53,6 +59,29 @@ if(isset($_GET['fetch_rooms'])){
                    continue; 
                 }
         }
+
+        // get facilities of room with filters
+
+        $fac_count=0;
+
+        $fac_q=mysqli_query($con,"SELECT f.name ,f.id FROM `facilities` f 
+            INNER JOIN `room_facilities` rfac ON f.id = rfac.facilities_id 
+            WHERE rfac.room_id='$room_data[id]'");
+            $facilities_data="";
+            while($fac_row=mysqli_fetch_assoc($fac_q)){
+
+                if(in_array($fac_row['id'],$facility_list['facilities'])){
+                    $fac_count++;
+                }
+
+              $facilities_data.="<span class='badge rounded-pill bg-light text-dark text-wrap me-1 mb-1'>
+              {$fac_row['name']}
+              </span>";
+          }
+          if(count($facility_list['facilities'])!=$fac_count){
+            continue;
+          }
+
           // get features of room
           $fea_q=mysqli_query($con,"SELECT f.name FROM `features` f INNER JOIN `room_features` rfea ON f.id = rfea.features_id WHERE rfea.room_id='$room_data[id]' ");
           $features_data="";
@@ -62,14 +91,8 @@ if(isset($_GET['fetch_rooms'])){
             </span>";
           }
 
-          // get facilities of room
-            $fac_q=mysqli_query($con,"SELECT f.name FROM `facilities` f INNER JOIN `room_facilities` rfac ON f.id = rfac.facilities_id WHERE rfac.room_id='$room_data[id]'");
-            $facilities_data="";
-            while($fac_row=mysqli_fetch_assoc($fac_q)){
-              $facilities_data.="<span class='badge rounded-pill bg-light text-dark text-wrap me-1 mb-1'>
-              {$fac_row['name']}
-              </span>";
-          }
+          
+            
 
           // get  room image
            $room_thumb=ROOMS_IMG_PATH."thumbnail.jpg";
