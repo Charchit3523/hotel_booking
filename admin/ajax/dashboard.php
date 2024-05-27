@@ -11,7 +11,7 @@ if(isset($_POST['booking_analytics'])){
   $query = "SELECT 
               COUNT(booking_id) AS `total_bookings`,
               COUNT(CASE WHEN booking_status='Booked' AND arival=0 THEN 1 END) AS `active_bookings`,
-              COUNT(CASE WHEN booking_status='cancelled' AND refund=0 THEN 1 END) AS `cancelled_bookings`
+              COUNT(CASE WHEN booking_status='cancelled' AND refund=1 THEN 1 END) AS `cancelled_bookings`
               FROM `booking_order`";
   $result = mysqli_query($con, $query);
 

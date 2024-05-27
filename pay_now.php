@@ -1,29 +1,196 @@
 <?php
-      require('admin/inc/db_config.php');
-      require('admin/inc/essentials.php');
-      date_default_timezone_set("Asia/Kathmandu");
-      session_start();
-      
-      if(!(isset($_SESSION['IS_LOGIN']))){
-        redirect('index.php');
-      }
-     
-      if(isset($_POST['pay_now'])){
-        $order_id = 'ORD_'.$_SESSION['u_id'].random_int(11111, 999999999);
-        // insert ddata into database
-       
-        $form_data=filteration($_POST);
-        $q1="INSERT INTO `booking_order`(`user_id`, `room_id`, `check_in`, `check_out`,`order_id`) VALUES (?,?,?,?,?)";
-        insert($q1,[$_SESSION['u_id'],$_SESSION['room']['id'],$form_data['checkin'],$form_data['checkout'], $order_id ],'issss');
-        
-        $booking_id=mysqli_insert_id($con);
-        $q2="INSERT INTO `booking_details`( `booking_id`, `room_name`, `price`, `total_pay`, `user_name`, `phonenumber`, `address`) VALUES (?,?,?,?,?,?,?)";
-        insert($q2,[$booking_id,$_SESSION['room']['name'],$_SESSION['room']['price'],$_SESSION['room']['payment'],$form_data['name'],$form_data['phonenum'],$form_data['address']],'issssss');
+require('admin/inc/db_config.php');
+require('admin/inc/essentials.php');
+date_default_timezone_set("Asia/Kathmandu");
+session_start();
+
+if (!(isset($_SESSION['IS_LOGIN']))) {
+    redirect('index.php');
+}
+
+if (isset($_POST['pay_now'])) {
+    $order_id = 'ORD_' . $_SESSION['u_id'] . random_int(11111, 999999999);
+    // insert data into database
+    $form_data = filteration($_POST);
+    $q1 = "INSERT INTO `booking_order`(`user_id`, `room_id`, `check_in`, `check_out`,`order_id`) VALUES (?,?,?,?,?)";
+    insert($q1, [$_SESSION['u_id'], $_SESSION['room']['id'], $form_data['checkin'], $form_data['checkout'], $order_id], 'issss');
+
+    $booking_id = mysqli_insert_id($con);
+    $q2 = "INSERT INTO `booking_details`( `booking_id`, `room_name`, `price`, `total_pay`, `user_name`, `phonenumber`, `address`) VALUES (?,?,?,?,?,?,?)";
+    insert($q2, [$booking_id, $_SESSION['room']['name'], $_SESSION['room']['price'], $_SESSION['room']['payment'], $form_data['name'], $form_data['phonenum'], $form_data['address']], 'issssss');
+}
+
+$querry1 = "SELECT `booking_id`,`user_id` FROM `booking_order` WHERE `room_id`={$_SESSION['room']['id']} ORDER BY `booking_id` DESC LIMIT 1";
+
+$res = mysqli_query($con, $querry1);
+
+if ($res) {
+    if (mysqli_num_rows($res) > 0) {
+        $q1_fetch = mysqli_fetch_assoc($res);
+        if (isset($_POST['pay'])) {
+            $booking_id = mysqli_real_escape_string($con, $q1_fetch['booking_id']);
+            $existing_booking = mysqli_query($con, "SELECT * FROM `booking_order` WHERE `booking_id`='$booking_id'");
+            if (mysqli_num_rows($existing_booking) > 0) {
+                $q = "UPDATE `booking_order` SET `booking_status`='booked' WHERE `booking_id`='$booking_id'";
+                $res2 = mysqli_query($con, $q);
+                if ($res2) {
+                   
+                    if (mysqli_affected_rows($con) == 1) {
+                      
+                        redirect('pay_status.php?user=' . $_POST[$q1_fetch['user_id']]);
+                    } else {
+                        echo "<script> alert('No rows updated. Check booking ID: $booking_id') </script>";
+                    }
+                } else {
+                    echo "<script> alert('Error updating booking status: " . mysqli_error($con) . "') </script>";
+                }
+            } else {
+                echo "<script> alert('Booking ID $booking_id does not exist.') </script>";
+            }
+        } else {
+            echo "";
+        }
+    } else {
+        echo "No booking found for this room.";
     }
+} else {
+    echo "<script> alert('Error fetching booking information: " . mysqli_error($con) . "') </script>";
+}
+// for priice in khalti
+$query2="SELECT `booking_id`, `total_pay` FROM `booking_details` WHERE `booking_id`='$booking_id' ORDER BY `booking_id` DESC LIMIT 1";
+$reult = mysqli_query($con, $query2);
+if (mysqli_num_rows($reult) > 0) {
+  $query2_fetch = mysqli_fetch_assoc($reult);
+}
 
 
+$error_message = "";
+$khalti_public_key = "test_public_key_0857bcbe52514eb2bd8e2cae509c2c73";
 
+$amount =  $query2_fetch['total_pay'];
+$uniqueProductId = "nike-shoes";
+$uniqueUrl = "http://localhost/product/nike-shoes/";
+$uniqueProductName = "Nike shoes";
+$successRedirect = "http://localhost/hotel_booking/pay_status.php";
+
+function checkValid($data)
+{
+    $verifyAmount = 1000;
+    if ((float)$data["amount"] == $verifyAmount) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+$token = "";
+$price = $amount;
+$mpin = "";
+
+if (isset($_POST["mobile"]) && isset($_POST["mpin"])) {
+    try {
+        $mobile = $_POST["mobile"];
+        $mpin = $_POST["mpin"];
+        $price = (float)$amount;
+
+        $amount = (float)$amount * 100;
+
+        $curl = curl_init();
+
+        curl_setopt_array(
+            $curl,
+            array(
+                CURLOPT_URL => 'https://khalti.com/api/v2/payment/initiate/',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => '{
+            "public_key": "' . $khalti_public_key . '",
+            "mobile": ' . $mobile . ',
+            "transaction_pin": ' . $mpin . ',
+            "amount": ' . ($amount) . ',
+            "product_identity": "' . $uniqueProductId . '",
+            "product_name": "' . $uniqueProductName . '",
+            "product_url": "' . $uniqueUrl . '"
+    }',
+                CURLOPT_HTTPHEADER => array(
+                    'Content-Type: application/json'
+                ),
+            )
+        );
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        $parsed = json_decode($response, true);
+
+        if ($parsed !== null && key_exists("token", $parsed)) {
+            $token = $parsed["token"];
+        } else {
+            $error_message = "incorrect mobile or mpin";
+        }
+    } catch (Exception $e) {
+        $error_message = "incorrect mobile or mpin";
+    }
+}
+
+if (isset($_POST["otp"]) && isset($_POST["token"]) && isset($_POST["mpin"])) {
+    try {
+        $otp = $_POST["otp"];
+        $token = $_POST["token"];
+        $mpin = $_POST["mpin"];
+
+        $curl = curl_init();
+
+        curl_setopt_array(
+            $curl,
+            array(
+                CURLOPT_URL => 'https://khalti.com/api/v2/payment/confirm/',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => '{
+            "public_key": "' . $khalti_public_key . '",
+            "transaction_pin": ' . $mpin . ',
+            "confirmation_code": ' . $otp . ',
+            "token": "' . $token . '"
+    }',
+                CURLOPT_HTTPHEADER => array(
+                    'Content-Type: application/json'
+                ),
+            )
+        );
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        $parsed = json_decode($response, true);
+
+        if ($parsed !== null && key_exists("token", $parsed)) {
+            $isvalid = checkValid($parsed);
+            if ($isvalid) {
+                $error_message = "<span style='color:green'>payment success</span> <script> window.location='" . $successRedirect . "'; </script>";
+            }
+        } else {
+            $error_message = "could not process the transaction at the moment.";
+            if ($parsed !== null && key_exists("detail", $parsed)) {
+                $error_message = $parsed["detail"];
+            }
+        }
+    } catch (Exception $e) {
+        $error_message = "could not process the transaction at the moment.";
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,25 +199,72 @@
     <title>Document</title>
 </head>
 <body>
-<?php require('inc/links.php')?>
-   
+    <?php require('inc/links.php')?>
     
-<div class="col-lg-5 col-md-12 px-4">
-        <div class="card mb-4 border-0 shadow-sm rounded-3">
-          <div class="card-body">
-            <form action="pay_response.php" method="POST" id="payment_form">
-              <h6 class="mb-3">Payment</h6>
-              <div class="row">
-               
-                  <img src="payment.png" alt="">
-                  <button name="pay" class="btn text-white custom-bg shadow-none mb-1" >Pay now</button>
-                
-                </div>
-                
-              </div> 
+    <div class="khalticontainer">
+        <center>
+            <div><img src="khalti.png" alt="khalti" width="200"></div>
+        </center>
+        <?php if ($token == "") : ?>
+            <form action="pay_now.php" method="post">
+                <small>Mobile Number:</small> <br>
+                <input type="number" class="number" minlength="10" maxlength="10" name="mobile" placeholder="98xxxxxxxx">
+                <small>Khalti Mpin:</small> <br>
+                <input type="password" class="mpin" name="mpin" minlength="4" maxlength="6" placeholder="xxxx">
+                <small>Price:</small> <br>
+                <input type="text" class="price" Value="Rs. <?php echo $price; ?>" disabled>
+                <input type="hidden" class="price" name="amount" Value="<?php echo $price; ?>">
+                <br>
+                <span style="display:block;color:red;">
+                    <?php echo $error_message; ?>
+                </span>
+                <button >Pay Rs. <?php echo $price; ?></button>
+                <br>
+                <small>We dont store your credientials for some security reasons. You will have to reenter your details everytime.</small>
             </form>
-          </div>
-        </div>
-      </div>
+        <?php endif; ?>
+        <?php if ($token != "") : ?>
+            <form action="pay_now.php" method="post">
+                <input type="hidden" name="token" value="<?php echo $token; ?>">
+                <input type="hidden" name="mpin" value="<?php echo $mpin; ?>">
+                <small>OTP:</small> <br>
+                <input type="number" value="" name="otp" placeholder="xxxx">
+                <span style="display:block;color:red;">
+                    <?php echo $error_message; ?>
+                </span>
+                <button name="pay">pay RS. <?php echo $price; ?></button>
+            </form>
+        <?php endif; ?>
+    </div>
+    <style>
+    .khalticontainer {
+        width: 300px;
+        border: 2px solid #5C2D91;
+        margin: 0 auto;
+        padding: 8px;
+    }
+
+    input {
+        display: block;
+        width: 98%;
+        padding: 8px;
+        margin: 2px;
+    }
+
+    button {
+        display: block;
+        background-color: #5C2D91;
+        border: none;
+        color: white;
+        cursor: pointer;
+        width: 98%;
+        padding: 8px;
+        margin: 2px;
+    }
+
+    button:hover {
+        opacity: 0.8;
+    }
+    </style>
 </body>
 </html>
