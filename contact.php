@@ -27,7 +27,7 @@
     <div class="row">
       <div class="col-lg-6 col-md-6  px-4">
 
-       <iframe class="w-100 rounded mb-4" height="360pz"  src="<?php echo $contact_r['iframe']?>" loading="lazy" ></iframe>
+       <iframe class="w-100 rounded mb-4" height="360pz"  src="http://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7064.147533277554!2d85.3071212431779!3d27.715008604712473!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb18fcb77fd4bd%3A0x58099b1deffed8d4!2z4KSg4KSu4KWH4KSyLCDgpJXgpL7gpKDgpK7gpL7gpKHgpYzgpIEgNDQ2MDA!5e0!3m2!1sne!2snp!4v1716810818389!5m2!1sne!2snp" loading="lazy" ></iframe>
         <h5>Call Us</h5>
         <a href="tell: +<?php echo $contact_r['pn1']?>" class="d-inline-block mb-2 text-decoration-none text-dark">  
           <i class="bi bi-telephone"></i> +<?php echo $contact_r['pn1']?>
