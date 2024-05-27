@@ -1,6 +1,9 @@
 <?php
 require('admin/inc/db_config.php');
 require('admin/inc/essentials.php');
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 date_default_timezone_set("Asia/Kathmandu");
 session_start();
 
@@ -21,7 +24,7 @@ if (isset($_POST['pay_now'])) {
     insert($q2, [$booking_id, $_SESSION['room']['name'], $_SESSION['room']['price'], $_SESSION['room']['payment'], $form_data['name'], $form_data['phonenum'], $form_data['address']], 'issssss');
 }
 
-$querry1 = "SELECT `booking_id`,`user_id` `payment` FROM `booking_order` WHERE `room_id`={$_SESSION['room']['id']} ORDER BY `booking_id` DESC LIMIT 1";
+$querry1 = "SELECT `booking_id`,`user_id`, `payment` FROM `booking_order` WHERE `room_id`={$_SESSION['room']['id']} ORDER BY `booking_id` DESC LIMIT 1";
 
 $res = mysqli_query($con, $querry1);
 
@@ -33,15 +36,23 @@ if ($res) {
             $existing_booking = mysqli_query($con, "SELECT * FROM `booking_order` WHERE `booking_id`='$booking_id'");
             if (mysqli_num_rows($existing_booking) > 0) {
                 $q = "UPDATE `booking_order` SET `booking_status`='booked' WHERE `booking_id`='$booking_id'";
-                $res2 = mysqli_query($con, $q);
-                if ($res2) {
-                   
-                    if (mysqli_affected_rows($con) == 1) {
-                      
-                        redirect('pay_status.php?user=' . $_POST[$q1_fetch['user_id']]);
-                    } else {
-                        echo "<script> alert('No rows updated. Check booking ID: $booking_id') </script>";
-                    }
+                $q_em = "SELECT * FROM `user` WHERE `sr_no`= ?";
+                
+                // Prepare and execute the query to update booking status
+                $stmt_update = mysqli_prepare($con, $q);
+                mysqli_stmt_execute($stmt_update);
+
+                // Prepare and execute the query to fetch user email
+                $stmt_user = mysqli_prepare($con, $q_em);
+                mysqli_stmt_bind_param($stmt_user, "i", $q1_fetch['user_id']);
+                mysqli_stmt_execute($stmt_user);
+                $res_user = mysqli_stmt_get_result($stmt_user);
+                $user_data = mysqli_fetch_assoc($res_user);
+
+                if ($stmt_update && $stmt_user) {
+                    // Send email and redirect upon successful update
+                    send_mail($user_data['email']);
+                    redirect('pay_status.php?user=' . $q1_fetch['user_id']);
                 } else {
                     echo "<script> alert('Error updating booking status: " . mysqli_error($con) . "') </script>";
                 }
@@ -57,12 +68,13 @@ if ($res) {
 } else {
     echo "<script> alert('Error fetching booking information: " . mysqli_error($con) . "') </script>";
 }
+
 // for priice in khalti
 
 
 
 $error_message = "";
-$khalti_public_key = "test_public_key_0857bcbe52514eb2bd8e2cae509c2c73y";
+$khalti_public_key = "test_public_key_0857bcbe52514eb2bd8e2cae509c2c73";
 
 
 
@@ -98,7 +110,44 @@ function checkValid($data)
 // ------------------------------------------------------------------------
 // DONOT CHANGE THE CODE BELOW UNLESS YOU KNOW WHAT YOU ARE DOING
 // ------------------------------------------------------------------------
+function send_mail($email){
+    require('PHPmailer/Exception.php');
+    require('PHPmailer/SMTP.php');
+    require('PHPmailer/PHPMailer.php');
+    
+    $mail = new PHPMailer(true);
 
+    try {
+        //Server settings
+                  
+    	$mail->isSMTP();                                            //Send using SMTP
+		$mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+		$mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+		$mail->Username   = 'maharjancharchit11@gmail.com';                     //SMTP username
+		$mail->Password   = 'qnwv nngf swjv jhvy ';                               //SMTP password
+		$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+		$mail->Port       = 465;                                      //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+    
+        //Recipients
+        $mail->setFrom('maharjancharchit11@gmail.com', 'Hotel Booking');
+        $mail->addAddress($email);     //Add a recipient
+      
+        
+    
+        //Content
+        $mail->isHTML(true);                                  //Set email format to HTML
+        $mail->Subject = 'bookings';
+        $mail->Body    = "Your room has been booked </b>
+        Click the link below for more information:<br>
+         <a href='http://localhost/hotel_booking/bookings.php?email=$email'>Booking</a>";
+       
+    
+        $mail->send();
+       return true;
+    } catch (Exception $e) {
+        return false;
+    }
+}
 
 
 // declaring some global variables
@@ -111,61 +160,49 @@ if (isset($_POST["mobile"]) && isset($_POST["mpin"])) {
         $mobile = $_POST["mobile"];
         $mpin = $_POST["mpin"];
         $price = (float) $amount;
-
         $amount = (float) $amount * 100;
 
-
         $curl = curl_init();
-
-        curl_setopt_array(
-            $curl,
-            array(
-                CURLOPT_URL => 'https://khalti.com/api/v2/payment/initiate/',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => '{
-            "public_key": "' . $khalti_public_key . '",
-            "mobile": ' . $mobile . ',
-            "transaction_pin": ' . $mpin . ',
-            "amount": ' . ($amount) . ',
-            "product_identity": "' . $uniqueProductId . '",
-            "product_name": "' . $uniqueProductName . '",
-            "product_url": "' . $uniqueUrl . '"
-    }',
-                CURLOPT_HTTPHEADER => array(
-                    'Content-Type: application/json'
-                ),
-            )
-        );
+        curl_setopt_array($curl, [
+            CURLOPT_URL => 'https://khalti.com/api/v2/payment/initiate/',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => json_encode([
+                "public_key" => $khalti_public_key,
+                "mobile" => $mobile,
+                "transaction_pin" => $mpin,
+                "amount" => $amount,
+                "product_identity" => $uniqueProductId,
+                "product_name" => $uniqueProductName,
+                "product_url" => $uniqueUrl
+            ]),
+            CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+        ]);
 
         $response = curl_exec($curl);
-
         curl_close($curl);
+
+        // Log the response for debugging
+        file_put_contents('khalti_response_log.txt', $response, FILE_APPEND);
+
         $parsed = json_decode($response, true);
 
-
-        if (key_exists("token", $parsed)) {
+        if (isset($parsed["token"])) {
             $token = $parsed["token"];
-
         } else {
-            $error_message = "incorrect mobile or mpin";
-
-
-
-
+            $error_message = "Incorrect mobile or MPIN";
+            if (isset($parsed["detail"])) {
+                $error_message .= ": " . $parsed["detail"];
+            }
+            // Log the detailed error message for further inspection
+            file_put_contents('khalti_error_log.txt', json_encode($parsed), FILE_APPEND);
         }
     } catch (Exception $e) {
-        $error_message = "incorrect mobile or mpin";
-
+        $error_message = "Error processing request: " . $e->getMessage();
     }
-
-
 }
+
+
 
 // otp verification
 if (isset($_POST["otp"]) && isset($_POST["token"]) && isset($_POST["mpin"])) {
