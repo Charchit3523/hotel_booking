@@ -12,15 +12,16 @@ if (isset($_POST['pay_now'])) {
     $order_id = 'ORD_' . $_SESSION['u_id'] . random_int(11111, 999999999);
     // insert data into database
     $form_data = filteration($_POST);
-    $q1 = "INSERT INTO `booking_order`(`user_id`, `room_id`, `check_in`, `check_out`,`order_id`) VALUES (?,?,?,?,?)";
-    insert($q1, [$_SESSION['u_id'], $_SESSION['room']['id'], $form_data['checkin'], $form_data['checkout'], $order_id], 'issss');
+    $q1 = "INSERT INTO `booking_order`(`user_id`, `room_id`, `check_in`, `check_out`, `payment`, `order_id`) VALUES (?,?,?,?,?,?)";
+    insert($q1, [$_SESSION['u_id'], $_SESSION['room']['id'], $form_data['checkin'], $form_data['checkout'], $_SESSION['room']['payment'], $order_id], 'isssss');
+
 
     $booking_id = mysqli_insert_id($con);
     $q2 = "INSERT INTO `booking_details`( `booking_id`, `room_name`, `price`, `total_pay`, `user_name`, `phonenumber`, `address`) VALUES (?,?,?,?,?,?,?)";
     insert($q2, [$booking_id, $_SESSION['room']['name'], $_SESSION['room']['price'], $_SESSION['room']['payment'], $form_data['name'], $form_data['phonenum'], $form_data['address']], 'issssss');
 }
 
-$querry1 = "SELECT `booking_id`,`user_id` FROM `booking_order` WHERE `room_id`={$_SESSION['room']['id']} ORDER BY `booking_id` DESC LIMIT 1";
+$querry1 = "SELECT `booking_id`,`user_id` `payment` FROM `booking_order` WHERE `room_id`={$_SESSION['room']['id']} ORDER BY `booking_id` DESC LIMIT 1";
 
 $res = mysqli_query($con, $querry1);
 
@@ -57,43 +58,62 @@ if ($res) {
     echo "<script> alert('Error fetching booking information: " . mysqli_error($con) . "') </script>";
 }
 // for priice in khalti
-$query2="SELECT `booking_id`, `total_pay` FROM `booking_details` WHERE `booking_id`='$booking_id' ORDER BY `booking_id` DESC LIMIT 1";
-$reult = mysqli_query($con, $query2);
-if (mysqli_num_rows($reult) > 0) {
-  $query2_fetch = mysqli_fetch_assoc($reult);
-}
+
 
 
 $error_message = "";
-$khalti_public_key = "test_public_key_0857bcbe52514eb2bd8e2cae509c2c73";
+$khalti_public_key = "test_public_key_0857bcbe52514eb2bd8e2cae509c2c73y";
 
-$amount =  $query2_fetch['total_pay'];
+
+
+$amount = $q1_fetch['payment'];
 $uniqueProductId = "nike-shoes";
-$uniqueUrl = "http://localhost/product/nike-shoes/";
+$uniqueUrl = "http://localhost/hotel_booking/";
 $uniqueProductName = "Nike shoes";
-$successRedirect = "http://localhost/hotel_booking/pay_status.php";
+$successRedirect = "http://localhost/hotel_booking/pay_status"; // change this url , it will be the page user will be redirected after successful payment
+
+
+// ------------------------------------------------------------------------
+// HINT : just change price above and redirect user to this page. It will handel everything automatically.
+// ------------------------------------------------------------------------
 
 function checkValid($data)
 {
-    $verifyAmount = 1000;
-    if ((float)$data["amount"] == $verifyAmount) {
+    $verifyAmount = 1000; // get amount from database and multiply by 100
+    // $data contains khalti response. you can print it to view more details.
+    // eg. $data["token] will give token & $data["amount] will give amount and more. see khalti docs for response format
+    // $error_message="";
+    // show error from above message
+    if ((float) $data["amount"] == $verifyAmount) {
         return 1;
     } else {
         return 0;
     }
-}
 
+    // use your extra function for checking price & all again. You can perform more action here. 
+    // 1= success, 0 = error, 
+
+    //
+}
+// ------------------------------------------------------------------------
+// DONOT CHANGE THE CODE BELOW UNLESS YOU KNOW WHAT YOU ARE DOING
+// ------------------------------------------------------------------------
+
+
+
+// declaring some global variables
 $token = "";
 $price = $amount;
 $mpin = "";
-
+// send otp
 if (isset($_POST["mobile"]) && isset($_POST["mpin"])) {
     try {
         $mobile = $_POST["mobile"];
         $mpin = $_POST["mpin"];
-        $price = (float)$amount;
+        $price = (float) $amount;
 
-        $amount = (float)$amount * 100;
+        $amount = (float) $amount * 100;
+
 
         $curl = curl_init();
 
@@ -128,21 +148,32 @@ if (isset($_POST["mobile"]) && isset($_POST["mpin"])) {
         curl_close($curl);
         $parsed = json_decode($response, true);
 
-        if ($parsed !== null && key_exists("token", $parsed)) {
+
+        if (key_exists("token", $parsed)) {
             $token = $parsed["token"];
+
         } else {
             $error_message = "incorrect mobile or mpin";
+
+
+
+
         }
     } catch (Exception $e) {
         $error_message = "incorrect mobile or mpin";
+
     }
+
+
 }
 
+// otp verification
 if (isset($_POST["otp"]) && isset($_POST["token"]) && isset($_POST["mpin"])) {
     try {
         $otp = $_POST["otp"];
         $token = $_POST["token"];
         $mpin = $_POST["mpin"];
+
 
         $curl = curl_init();
 
@@ -174,20 +205,26 @@ if (isset($_POST["otp"]) && isset($_POST["token"]) && isset($_POST["mpin"])) {
         curl_close($curl);
         $parsed = json_decode($response, true);
 
-        if ($parsed !== null && key_exists("token", $parsed)) {
+        if (key_exists("token", $parsed)) {
             $isvalid = checkValid($parsed);
             if ($isvalid) {
                 $error_message = "<span style='color:green'>payment success</span> <script> window.location='" . $successRedirect . "'; </script>";
             }
+
+
         } else {
-            $error_message = "could not process the transaction at the moment.";
-            if ($parsed !== null && key_exists("detail", $parsed)) {
+            $error_message = "couldnot process the transaction at the moment.";
+            if (key_exists("detail", $parsed)) {
                 $error_message = $parsed["detail"];
             }
+
         }
     } catch (Exception $e) {
-        $error_message = "could not process the transaction at the moment.";
+        $error_message = "couldnot process the transaction at the moment.";
+
     }
+
+
 }
 ?>
 
