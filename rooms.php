@@ -144,45 +144,75 @@
     
     
 
-      function fetch_rooms(){
-        // stringyfying checkin and checkout val
-        let chk_avail=JSON.stringify({
-          checkin:checkin.value,
-          checkout:checkout.value,
-        });
-        let guests=JSON.stringify({
-          adults:adults.value,
-          childrens:childrens.value,
-        });
-        let facility_list={"facilities":[]};
-        let get_facilities=document.querySelectorAll('[name="facilities"]:checked');
-        if(get_facilities.length>0){
-          get_facilities.forEach((facility)=>{
-            facility_list.facilities.push(facility.value);
+    function fetch_rooms() {
+      // Stringify checkin and checkout values
+          let chk_avail = JSON.stringify({
+              checkin: checkin.value,
+              checkout: checkout.value
           });
-          facilities_btn.classList.remove('d-none');
-          reset_btn.classList.remove('d-none');
 
-        }
-        
-        else{
-          facilities_btn.classList.add('d-none');
-        }  
+          // Stringify guests values
+          let guests = JSON.stringify({
+              adults: adults.value,
+              childrens: childrens.value
+          });
 
-        facility_list=JSON.stringify(facility_list);
+          // Initialize an object to store selected facilities
+          let facility_list = { "facilities": [] };
 
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", "ajax/rooms.php?fetch_rooms&check_avail="+chk_avail+"&guests="+guests+"&facility_list="+facility_list, true);
-        xhr.onprogress=function(){
-        rooms_data.innerHTML= ` <div class="spinner-border mb-3 d-block mx-auto" id="loader" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div>`
-        }
-        xhr.onload=function(){
-          rooms_data.innerHTML=this.responseText;
-        }
-        xhr.send();
-      }
+          // Get all checked facilities checkboxes
+          let get_facilities = document.querySelectorAll('[name="facilities"]:checked');
+
+          // Iterate over the selected facilities and add them to the facility list
+          get_facilities.forEach((facility) => {
+              facility_list.facilities.push(facility.value);
+          });
+
+          // Toggle facility buttons visibility based on whether any facilities are selected
+          if (get_facilities.length > 0) {
+              facilities_btn.classList.remove('d-none'); // Show the facilities button
+              reset_btn.classList.remove('d-none'); // Show the reset button
+          } else {
+              facilities_btn.classList.add('d-none'); // Hide the facilities button
+          }
+
+          // Convert the facility list to a JSON string
+          facility_list = JSON.stringify(facility_list);
+
+          // Create a new XMLHttpRequest object
+          let xhr = new XMLHttpRequest();
+
+          // Configure it: GET-request for the URL with query parameters
+          xhr.open("GET", `ajax/rooms.php?fetch_rooms&check_avail=${chk_avail}&guests=${guests}&facility_list=${facility_list}`, true);
+
+          // Set up a function to show a loading spinner while the request is in progress
+          xhr.onprogress = function () {
+              rooms_data.innerHTML = `
+                  <div class="spinner-border mb-3 d-block mx-auto" id="loader" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                  </div>`;
+          };
+
+          // Set up a function to handle the response when the request completes
+          xhr.onload = function () {
+              if (this.status >= 200 && this.status < 300) {
+                  // If the request is successful, display the response text
+                  rooms_data.innerHTML = this.responseText;
+              } else {
+                  // If the request fails, display an error message
+                  rooms_data.innerHTML = "Error loading rooms data.";
+              }
+          };
+
+          // Set up a function to handle network errors
+          xhr.onerror = function () {
+              // Display a network error message
+              rooms_data.innerHTML = "Network error.";
+          };
+
+          // Send the request
+          xhr.send();
+    }
 
 
       function check_avail_filter(){

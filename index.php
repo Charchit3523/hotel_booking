@@ -53,7 +53,7 @@
     </div>
 
   <!-- booking -->
-    <div class="container availability-form">
+    <div class="container availability-form ">
       <div class="row">
         <div class="col-lg-12 bg-white shadow p-4 rounded">
           <h5 class="mb-4">Check Booking Availability</h5>
@@ -368,50 +368,51 @@
  
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
+  // Initialize Swiper for the main container with fade effect
   var swiper = new Swiper(".swiper-container", {
-    spaceBetween: 30,
-    effect: "fade",
-    loop: true,
-    autoplay:{
-      delay:3500,
-      disableOnInteraction: false,
-
+    spaceBetween: 30, // Space between slides in pixels
+    effect: "fade", // Fade effect for slide transition
+    loop: true, // Enable looping of slides
+    autoplay: {
+      delay: 3500, // Delay between slides in milliseconds
+      disableOnInteraction: false, // Continue autoplay after user interactions
     }
   });
-  
-    var swiper = new Swiper(".swiper_testimonials", {
-      effect: "coverflow",
-      grabCursor: true,
-      centeredSlides: true,
-      slidesPerView: "auto",
-      slidesPerView:"3",
-      loop: true,
-      coverflowEffect: {
-        rotate: 50,
-        stretch: 0,
-        depth: 100,
-        modifier: 1,
-        slideShadows: false,
+
+  // Initialize Swiper for testimonials with coverflow effect
+  var swiper = new Swiper(".swiper_testimonials", {
+    effect: "coverflow", // Coverflow effect for slide transition
+    grabCursor: true, // Show grab cursor icon on hover
+    centeredSlides: true, // Center slides
+    slidesPerView: "auto", // Set slides per view to automatic
+    slidesPerView: "3", // Show 3 slides at a time
+    loop: true, // Enable looping of slides
+    coverflowEffect: {
+      rotate: 50, // Rotate value for coverflow effect
+      stretch: 0, // Stretch value for coverflow effect
+      depth: 100, // Depth value for coverflow effect
+      modifier: 1, // Modifier value for coverflow effect
+      slideShadows: false, // Disable slide shadows
+    },
+    pagination: {
+      el: ".swiper-pagination", // Pagination element
+    },
+    breakpoints: {
+      320: {
+        slidesPerView: 1, // Show 1 slide for screens >= 320px
       },
-      pagination: {
-        el: ".swiper-pagination",
+      6402: {
+        slidesPerView: 1, // Show 1 slide for screens >= 640px (typo? Consider changing to 640)
       },
-      breakpoints: {
-        320:{
-          slidesPerView:1,
-        },
-        6402:{
-          slidesPerView:1,
-        },
-        768:{
-          slidesPerView:2,
-        },
-        1024:{
-          slidesPerView:3,
-        },
-      }
-    });
-  
+      768: {
+        slidesPerView: 2, // Show 2 slides for screens >= 768px
+      },
+      1024: {
+        slidesPerView: 3, // Show 3 slides for screens >= 1024px
+      },
+    }
+  });
+
 </script>
 </body>
 </html> 

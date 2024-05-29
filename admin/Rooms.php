@@ -322,16 +322,14 @@ adminLogin();
                     var myModal = document.getElementById('add-room');
                     var modal = new bootstrap.Modal(myModal);
                     modal.hide();
-                    // console.log(xhr.responseText);
+                    console.log(xhr.responseText);
 
                     if (xhr.responseText.trim() === '1') {
                         alert('success', 'New room added!');
                         add_room_form.reset();
                         get_all_rooms();
                         
-                    } else {
-                        alert('error', 'Upload failed');
-                    }
+                    } 
                 } else {
                     console.error('Request failed with status: ' + xhr.status);
                 }

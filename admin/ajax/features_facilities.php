@@ -79,18 +79,18 @@ if(isset($_POST['get_facilities'])){
     $path=FEATURES_IMG_PATH;
     while($row = mysqli_fetch_assoc($res)){
         echo <<<data
-<tr class"align-middle">
-    <td>$i</td>
-    <td><img src="{$path}{$row['icon']}" width="50px"></td>
-    <td>{$row['name']}</td> 
-    <td>{$row['description']}</td>    
-    <td>
-        <button type="button" onclick="rem_facility({$row['id']})" class="btn btn-sm btn-danger shadow-none">
-            <i class='bi bi-trash'> Delete</i>
-        </button>
-    </td>            
-</tr>
-data;
+                    <tr class"align-middle">
+                        <td>$i</td>
+                        <td><img src="{$path}{$row['icon']}" width="50px"></td>
+                        <td>{$row['name']}</td> 
+                        <td>{$row['description']}</td>    
+                        <td>
+                            <button type="button" onclick="rem_facility({$row['id']})" class="btn btn-sm btn-danger shadow-none">
+                                <i class='bi bi-trash'> Delete</i>
+                            </button>
+                        </td>            
+                    </tr>
+                data;
        $i++;
     }
 }

@@ -25,9 +25,9 @@ adminLogin();
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <h5 class="card-title m-0">General Settings</h5>
-                            <button type="button" class="btn btn-dark shadow-none btn-sm" data-bs-toggle="modal" data-bs-target="#general-s">
+                            <!-- <button type="button" class="btn btn-dark shadow-none btn-sm" data-bs-toggle="modal" data-bs-target="#general-s">
                                 <i class="bi bi-pencil-square"></i> Edit
-                            </button>
+                            </button> -->
                         </div>
                         <h6 class="card-subtitle mb-2 mb-1 fw-bold">Site Title</h6>
                         <p class="card-text" id="site_title"></p>
@@ -35,7 +35,7 @@ adminLogin();
                         <p class="card-text" id="site_about"></p>
                     </div>
                 </div>
-                 <!-- general modal -->
+                 <!-- general modal
                 <div class="modal fade" id="general-s" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <form>
@@ -60,7 +60,7 @@ adminLogin();
                             </div>
                         </form>
                     </div>
-                </div>
+                </div> -->
                 <!-- <div class="card">
                <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between mb-3">

@@ -155,165 +155,180 @@ adminLogin();
     ?>
 <script> 
     
-let feature_s_form = document.getElementById('feature_s_form');
-let facility_s_form = document.getElementById('facility_s_form');
-feature_s_form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    add_feature();
-});
+    // Get the form elements for feature and facility
+    let feature_s_form = document.getElementById('feature_s_form');
+    let facility_s_form = document.getElementById('facility_s_form');
 
-function add_feature() {
+    // Add event listener to feature form submission
+    feature_s_form.addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent default form submission
+    add_feature(); // Call add_feature function
+    });
+
+    // Function to add a feature
+    function add_feature() {
     let data = new FormData();
-    data.append('name', feature_s_form.elements['feature_name'].value);
-    data.append('add_feature', '');
+    data.append('name', feature_s_form.elements['feature_name'].value); // Append feature name
+    data.append('add_feature', ''); // Append action
 
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "ajax/features_facilities.php", true);
+    xhr.open("POST", "ajax/features_facilities.php", true); // Open POST request
 
     xhr.onload = function() {
-        if (xhr.status >= 200 && xhr.status < 300) {
-            var myModal = document.getElementById('feature-s');
-            var modal = new bootstrap.Modal(myModal);
-            modal.hide();
-            console.log(xhr.responseText);
+    if (xhr.status >= 200 && xhr.status < 300) { // Check if request was successful
+        var myModal = document.getElementById('feature-s');
+        var modal = new bootstrap.Modal(myModal);
+        modal.hide(); // Hide modal
+        console.log(xhr.responseText); // Log response
 
-            if (xhr.responseText.trim() === '1') {
-                alert('success', 'New Feature added!');
-                feature_s_form.elements['feature_name'].value = '';
-                get_features();
-            } else {
-                alert('error', 'Upload failed');
-            }
+        if (xhr.responseText.trim() === '1') { // Check if feature was added successfully
+            alert('success', 'New Feature added!');
+            feature_s_form.elements['feature_name'].value = ''; // Clear form field
+            get_features(); // Refresh features list
         } else {
-            console.error('Request failed with status: ' + xhr.status);
+            alert('error', 'Upload failed'); // Show error alert
         }
+    } else {
+        console.error('Request failed with status: ' + xhr.status); // Log request error
+    }
     };
 
     xhr.onerror = function() {
-        console.error('Request failed');
+    console.error('Request failed'); // Log error on request failure
     };
 
-    xhr.send(data);
-}
-function get_features(){
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", "ajax/features_facilities.php", true); 
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-    xhr.onload = function(){
-        document.getElementById('features-data').innerHTML =this.responseText;
+    xhr.send(data); // Send request with data
     }
 
-    xhr.send('get_features');
-}
-function rem_feature(val){
+    // Function to get and display features
+    function get_features(){
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "ajax/features_facilities.php", true); 
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     
+    xhr.onload = function() {
+    document.getElementById('features-data').innerHTML = this.responseText; // Update features data
+    }
+    
+    xhr.send('get_features'); // Send request to get features
+    }
+
+    // Function to remove a feature
+    function rem_feature(val){
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "ajax/features_facilities.php", true); 
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
     xhr.onload = function(){
-        console.log('Response received:', this.responseText);
-        if (this.responseText == 1) {
-            alert('success', 'Feature removed');
-            get_features();
-        } 
-        else if(this.responseText == 'room_added') {
-            alert('feature is added in a room');
-        }
-        else {
-            alert('error', 'Server error');
-        }
+    console.log('Response received:', this.responseText); // Log response
+    if (this.responseText == 1) {
+        alert('success', 'Feature removed'); // Show success alert
+        get_features(); // Refresh features list
+    } 
+    else if(this.responseText == 'room_added') {
+        alert('feature is added in a room'); // Show alert if feature is added in a room
+    }
+    else {
+        alert('error', 'Server error'); // Show error alert for server error
+    }
     };
 
-    xhr.send('rem_feature=' + val);
-}
-facility_s_form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    add_facility();
-});
-function add_facility() {
-    let data = new FormData();
-    data.append('name', facility_s_form.elements['facility_name'].value);
-    data.append('icon', facility_s_form.elements['facility_icon'].files[0]);
-    data.append('desc', facility_s_form.elements['facility_description'].value);
+    xhr.send('rem_feature=' + val); // Send request to remove feature
+    }
 
-    data.append('add_facility', '');
+    // Add event listener to facility form submission
+    facility_s_form.addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent default form submission
+    add_facility(); // Call add_facility function
+    });
+
+    // Function to add a facility
+    function add_facility() {
+    let data = new FormData();
+    data.append('name', facility_s_form.elements['facility_name'].value); // Append facility name
+    data.append('icon', facility_s_form.elements['facility_icon'].files[0]); // Append facility icon
+    data.append('desc', facility_s_form.elements['facility_description'].value); // Append facility description
+    data.append('add_facility', ''); // Append action
 
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "ajax/features_facilities.php", true);
+    xhr.open("POST", "ajax/features_facilities.php", true); // Open POST request
 
     xhr.onload = function() {
-        if (xhr.status >= 200 && xhr.status < 300) {
-            var myModal = document.getElementById('facility-s');
-            var modal = new bootstrap.Modal(myModal);
-            modal.hide();
-            console.log(xhr.responseText);
+    if (xhr.status >= 200 && xhr.status < 300) { // Check if request was successful
+        var myModal = document.getElementById('facility-s');
+        var modal = new bootstrap.Modal(myModal);
+        modal.hide(); // Hide modal
+        console.log(xhr.responseText); // Log response
 
-            if (xhr.responseText.trim() === '1') {
-                alert('success', 'New Facility added!');
-                facility_s_form.reset();
-                get_facilities();
-                
-            } else if(xhr.responseText.trim() === 'inv_img'){
-                alert('error', 'invalid image only svg image can be uploaded');
-            }
-            else if(xhr.responseText.trim() === 'inv_size'){
-                alert('error', 'image should be less than 1mb');
-            }
-            else{
-                alert('error', 'upload failed');
-            }
-        } else {
-            console.error('Request failed with status: ' + xhr.status);
+        if (xhr.responseText.trim() === '1') { // Check if facility was added successfully
+            alert('success', 'New Facility added!');
+            facility_s_form.reset(); // Reset form
+            get_facilities(); // Refresh facilities list
+            
+        } else if(xhr.responseText.trim() === 'inv_img'){
+            alert('error', 'invalid image only svg image can be uploaded'); // Show invalid image alert
         }
+        else if(xhr.responseText.trim() === 'inv_size'){
+            alert('error', 'image should be less than 1mb'); // Show image size error alert
+        }
+        else{
+            alert('error', 'upload failed'); // Show upload failed alert
+        }
+    } else {
+        console.error('Request failed with status: ' + xhr.status); // Log request error
+    }
     };
 
     xhr.onerror = function() {
-        console.error('Request failed');
+    console.error('Request failed'); // Log error on request failure
     };
 
-    xhr.send(data);
-}
-function get_facilities(){
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", "ajax/features_facilities.php", true); 
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-    xhr.onload = function(){
-        document.getElementById('facilities-data').innerHTML =this.responseText;
+    xhr.send(data); // Send request with data
     }
 
-    xhr.send('get_facilities');
-}
-function rem_facility(val){
+    // Function to get and display facilities
+    function get_facilities(){
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "ajax/features_facilities.php", true); 
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    
+
     xhr.onload = function(){
-        console.log('Response received:', this.responseText);
-        if (this.responseText == 1) {
-            alert('success', 'Facility removed');
-            get_facilities();
-        }
-        else if(this.responseText == 'room_added'){
-            alert('error', 'facility added in room');
-        }
-        else {
-            alert('error', 'Server error');
-        }
+    document.getElementById('facilities-data').innerHTML = this.responseText; // Update facilities data
+    }
+
+    xhr.send('get_facilities'); // Send request to get facilities
+    }
+
+    // Function to remove a facility
+    function rem_facility(val){
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "ajax/features_facilities.php", true); 
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    xhr.onload = function(){
+    console.log('Response received:', this.responseText); // Log response
+    if (this.responseText == 1) {
+        alert('success', 'Facility removed'); // Show success alert
+        get_facilities(); // Refresh facilities list
+    }
+    else if(this.responseText == 'room_added'){
+        alert('error', 'facility added in room'); // Show alert if facility is added in a room
+    }
+    else {
+        alert('error', 'Server error'); // Show error alert for server error
+    }
     };
 
-    xhr.send('rem_facility=' + val);
-}
+    xhr.send('rem_facility=' + val); // Send request to remove facility
+    }
 
-window.onload = function() {
+    // Call get_features and get_facilities on window load
+    window.onload = function() {
     get_features(); 
     get_facilities();
-};
-
-        
+    };
 
 </script>
+
 </body>
 </html>

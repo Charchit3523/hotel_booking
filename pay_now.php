@@ -79,9 +79,9 @@ $khalti_public_key = "test_public_key_0857bcbe52514eb2bd8e2cae509c2c73";
 
 
 $amount = $q1_fetch['payment'];
-$uniqueProductId = "nike-shoes";
+$uniqueProductId = "room";
 $uniqueUrl = "http://localhost/hotel_booking/";
-$uniqueProductName = "Nike shoes";
+$uniqueProductName = "room";
 $successRedirect = "http://localhost/hotel_booking/pay_status"; // change this url , it will be the page user will be redirected after successful payment
 
 
@@ -157,17 +157,23 @@ $mpin = "";
 // send otp
 if (isset($_POST["mobile"]) && isset($_POST["mpin"])) {
     try {
-        $mobile = $_POST["mobile"];
-        $mpin = $_POST["mpin"];
-        $price = (float) $amount;
-        $amount = (float) $amount * 100;
+            // Retrieve the mobile number and MPIN from POST request
+            $mobile = $_POST["mobile"];
+            $mpin = $_POST["mpin"];
 
-        $curl = curl_init();
-        curl_setopt_array($curl, [
-            CURLOPT_URL => 'https://khalti.com/api/v2/payment/initiate/',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => json_encode([
+            // Convert amount to a float and then multiply by 100 to get the value in paisa
+            $price = (float) $amount;
+            $amount = (float) $amount * 100;
+
+            // Initialize cURL session
+            $curl = curl_init();
+
+            // Set cURL options
+            curl_setopt_array($curl, [
+            CURLOPT_URL => 'https://khalti.com/api/v2/payment/initiate/',  // Khalti API URL
+            CURLOPT_RETURNTRANSFER => true,  // Return the response as a string instead of outputting it
+            CURLOPT_POST => true,  // Use POST method
+            CURLOPT_POSTFIELDS => json_encode([  // Set the POST fields as a JSON encoded array
                 "public_key" => $khalti_public_key,
                 "mobile" => $mobile,
                 "transaction_pin" => $mpin,
@@ -176,31 +182,37 @@ if (isset($_POST["mobile"]) && isset($_POST["mpin"])) {
                 "product_name" => $uniqueProductName,
                 "product_url" => $uniqueUrl
             ]),
-            CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
-        ]);
+            CURLOPT_HTTPHEADER => ['Content-Type: application/json'],  // Set content type to application/json
+            ]);
 
-        $response = curl_exec($curl);
-        curl_close($curl);
+            // Execute cURL request
+            $response = curl_exec($curl);
 
-        // Log the response for debugging
-        file_put_contents('khalti_response_log.txt', $response, FILE_APPEND);
+            // Close cURL session
+            curl_close($curl);
 
-        $parsed = json_decode($response, true);
+            // Log the response for debugging purposes
+            file_put_contents('khalti_response_log.txt', $response, FILE_APPEND);
 
-        if (isset($parsed["token"])) {
-            $token = $parsed["token"];
-        } else {
+            // Parse the JSON response
+            $parsed = json_decode($response, true);
+
+            // Check if the response contains a token
+            if (isset($parsed["token"])) {
+            $token = $parsed["token"];  // Extract the token from the response
+            } else {
+            // Handle errors if the token is not present
             $error_message = "Incorrect mobile or MPIN";
             if (isset($parsed["detail"])) {
-                $error_message .= ": " . $parsed["detail"];
+                $error_message .= ": " . $parsed["detail"];  // Append detailed error message if available
             }
             // Log the detailed error message for further inspection
             file_put_contents('khalti_error_log.txt', json_encode($parsed), FILE_APPEND);
-        }
-    } catch (Exception $e) {
-        $error_message = "Error processing request: " . $e->getMessage();
-    }
-}
+            }
+            } catch (Exception $e) {
+                $error_message = "Error processing request: " . $e->getMessage();
+            }
+            }
 
 
 

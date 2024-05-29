@@ -46,44 +46,49 @@ function send_mail($email,$reset_token){
     }
 }
 if(isset($_POST['reset_pass'])){
+    // Check if the 'reset_pass' POST parameter is set, indicating a password reset request
     
-    $q="SELECT * FROM `user` WHERE `email`='{$_POST['email']}'";
-    $result=mysqli_query($con,$q);
+    // Construct a SQL query to select user data based on the provided email
+    $q = "SELECT * FROM `user` WHERE `email`='{$_POST['email']}'";
+    
+    // Execute the SQL query
+    $result = mysqli_query($con, $q);
+    
+    // Check if the query was successful
     if($result){
-        if(mysqli_num_rows($result)==1){
-            $reset_token=rand(111111111, 999999999);
+        // If the query was successful, check if exactly one row (user) was found
+        if(mysqli_num_rows($result) == 1){
+            // If exactly one user is found, generate a random reset token and set the reset token expiration date
+            $reset_token = rand(111111111, 999999999);
             date_default_timezone_set('Asia/Kathmandu');
-            $date=date("Y-m-d");
-            $q="UPDATE `user` SET `resettoken`='$reset_token',`resettokenexpire`='$date' WHERE email='{$_POST['email']}'";
-           
-            if(mysqli_query($con,$q) && send_mail($_POST['email'],$reset_token)){
-                echo
-                "<script> alert('Password reset link sent to email');
-                window.location.href='login.php';</script>
-                ";
+            $date = date("Y-m-d");
+            
+            // Construct an SQL query to update the user's reset token and token expiration date
+            $q = "UPDATE `user` SET `resettoken`='$reset_token',`resettokenexpire`='$date' WHERE email='{$_POST['email']}'";
+            
+            // Execute the SQL query to update the user's reset token and token expiration date
+            if(mysqli_query($con, $q) && send_mail($_POST['email'], $reset_token)){
+                // If the update query is successful and the reset email is sent successfully, display a success message and redirect to the login page
+                echo "<script>
+                        alert('Password reset link sent to email'); window.location.href='login.php';
+                    </script>";
+            } else {
+                // If there is an error sending the reset email or executing the update query, display an error message and redirect to the login page
+                echo "<script> 
+                        alert('Server down, please try again later'); window.location.href='login.php';
+                    </script>";
             }
-            else{
-                echo
-                "<script> alert('server down try later');
-                window.location.href='login.php';</script>
-                ";
+        } else {
+            // If no user is found with the provided email, display a message indicating that the email is not found and redirect to the login page
+            echo "<script> 
+                    alert('Email not found'); window.location.href='login.php';
+                </script>";
             }
-        
-        }
-        else{
-            echo
-            "<script> alert('Email not found');
-            window.location.href='login.php';</script>
-            ";
-           
-        }
-    }
-    else{
-        echo
-        "<script> alert('error querry');
-        window.location.href='login.php';</script>
-        ";
-        
+    } else {
+        // If there is an error executing the SQL query, display an error message and redirect to the login page
+        echo "<script> 
+                alert('Error querying database'); window.location.href='login.php';
+            </script>";
     }
 }
 

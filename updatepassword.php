@@ -160,18 +160,35 @@
             }
         }
 
-        if(isset($_POST['updatepassword'])){
-            $pass=password_hash($_POST['Password'],PASSWORD_BCRYPT);
-            $update="UPDATE `user` SET `password`='$pass', `cpassword`='$pass',`resettoken`= NULL,`resettokenexpire`= NULL WHERE `email`='{$_POST['email']}'";
-            if(mysqli_query($con,$update)){
-                echo "<script> alert('Password Updated Successfully');
-                window.location.href='login.php';</script>";
-            }
-            else{
-                echo "<script> alert('server down');
-                window.location.href='login.php';</script>";
+       // Check if the form is submitted with the 'updatepassword' field
+        if (isset($_POST['updatepassword'])) {
+           
+            $pass = ($_POST['Password']);
+
+            // Construct the SQL update query to update the user's password and reset tokens
+            $update = "UPDATE `user` SET 
+                        `password` = '$pass', 
+                        `cpassword` = '$pass',
+                        `resettoken` = NULL, 
+                        `resettokenexpire` = NULL 
+                    WHERE `email` = '{$_POST['email']}'";
+
+            // Execute the query and check if it was successful
+            if (mysqli_query($con, $update)) {
+                // If successful, alert the user and redirect to the login page
+                echo "<script>
+                        alert('Password Updated Successfully');
+                        window.location.href='login.php';
+                    </script>";
+            } else {
+                // If there is a server error, alert the user and redirect to the login page
+                echo "<script>
+                        alert('Server down');
+                        window.location.href='login.php';
+                    </script>";
             }
         }
+
     
     
     ?>

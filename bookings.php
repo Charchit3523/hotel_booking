@@ -62,13 +62,6 @@
                   Rate and Review 
                 </button>";
               }
-              
-              
-                      // if($data['rate_review']==0){
-                      //   $btn .=" <button class='btn btn-dark btn-sm shadow-none mt-2'>
-                      //     Rate and Revirew
-                      //   </button>";
-                      // }
                       
           } else if ($data['booking_status'] == 'cancelled') {
               $status_bg = 'bg-danger';
@@ -156,7 +149,7 @@
     </div>  
 <?php
   if(isset($_GET['cancel_status'])){
-    alert('success','Booking Successful');
+    alert('success','Cancel Booking Successful');
   }
   else if(isset($_GET['review_status'])){
     alert('success','Thank you for rating and reviewing');
@@ -165,71 +158,92 @@
 ?>
 <?php require('inc/footer.php')?>
 
-     <script>
-       function cancel_booking(id) {
-        console.log('Cancel button clicked. Booking ID:', id);
+<script>
+    // Function to handle booking cancellation
+    function cancel_booking(id) {
+        console.log('Cancel button clicked. Booking ID:', id); // Log the booking ID for debugging
         
-            if (confirm('Are you sure you want to cancel booking?')) {
-                console.log('Cancelling booking with ID:', id); // Debug statement
-                let xhr = new XMLHttpRequest();
-                xhr.open("POST", "ajax/cancel_booking.php", true);
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        // Confirm with the user before cancelling the booking
+        if (confirm('Are you sure you want to cancel booking?')) {
+            console.log('Cancelling booking with ID:', id); // Log the cancellation process
+            
+            // Create a new XMLHttpRequest object
+            let xhr = new XMLHttpRequest();
+            
+            // Configure it: POST-request to the URL /ajax/cancel_booking.php
+            xhr.open("POST", "ajax/cancel_booking.php", true);
+            
+            // Set the request header to send form data
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-                xhr.onload = function() {
-                  console.log('Response:', xhr.responseText); // Use xhr directly instead of this
+            // Set up a function to handle the response
+            xhr.onload = function() {
+                console.log('Response:', xhr.responseText); // Log the response for debugging
                 
-                    if (this.responseText == 1) {
-                        console.log('Cancellation successful'); // Debug statement
-                        window.location.href = "bookings.php?cancel_status=true";
-                    } else {
-                        console.log('Cancellation failed'); // Debug statement
-                        alert('Cancellation failed');
-                    }
+                // Check if the response indicates success
+                if (this.responseText == 1) {
+                    alert('Cancellation successful'); // Alert the user about the successful cancellation
+                    // Redirect to bookings page with a success status
+                    window.location.href = "bookings.php?cancel_status=true";
+                } else {
+                    console.log('Cancellation failed'); // Log the failure for debugging
+                    alert('Cancellation failed'); // Alert the user about the failure
                 }
-
-                xhr.send('cancel_booking&id=' + id);
             }
-       }
 
+            // Send the request with the booking ID
+            xhr.send('cancel_booking&id=' + id);
+        }
+    }
 
-       let review_form=document.getElementById('review-form');
+    // Get the review form element by its ID
+    let review_form = document.getElementById('review-form');
 
-       function review_room(bid,rid){
-          review_form.elements['booking_id'].value=bid;
-          review_form.elements['room_id'].value=rid;
+    // Function to prepare the review form with the booking ID and room ID
+    function review_room(bid, rid) {
+        // Set the hidden fields in the form with the booking and room IDs
+        review_form.elements['booking_id'].value = bid;
+        review_form.elements['room_id'].value = rid;
+    }
 
-       }
-       review_form.addEventListener('submit',function(e){
-        e.preventDefault();
-        
+    // Add an event listener to handle the form submission
+    review_form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent the default form submission
 
+        // Create a new FormData object
         let data = new FormData();
-        data.append('review_form', '');
-        data.append('rating', review_form.elements['rating'].value);
-        data.append('review', review_form.elements['review'].value);
-        data.append('booking_id', review_form.elements['booking_id'].value);
-        data.append('room_id', review_form.elements['room_id'].value);
+        
+        // Append the form data to the FormData object
+        data.append('review_form', ''); // Dummy value to simulate a form submission
+        data.append('rating', review_form.elements['rating'].value); // Append the rating
+        data.append('review', review_form.elements['review'].value); // Append the review text
+        data.append('booking_id', review_form.elements['booking_id'].value); // Append the booking ID
+        data.append('room_id', review_form.elements['room_id'].value); // Append the room ID
 
-
+        // Create a new XMLHttpRequest object
         let xhr = new XMLHttpRequest();
+        
+        // Configure it: POST-request to the URL /ajax/review_room.php
         xhr.open("POST", "ajax/review_room.php", true);
 
+        // Set up a function to handle the response
         xhr.onload = function() {
-            console.log('Response:', this.responseText); // Debug statement
-            if (this.responseText == 1) {
-              window.location.href='bookings.php?review_status=true';
-            } else {
-                
-                alert('Rating and review failed');
-            }
+            console.log('Response:', this.responseText); // Log the response for debugging
             
+            // Check if the response indicates success
+            if (this.responseText == 1) {
+                // Redirect to bookings page with a review status
+                window.location.href = 'bookings.php?review_status=true';
+            } else {
+                alert('Rating and review failed'); // Alert the user about the failure
+            }
         }
 
+        // Send the form data
         xhr.send(data);
+    });
+</script>
 
-       });
-
-     </script>
 
 
 
