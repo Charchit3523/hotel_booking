@@ -77,6 +77,10 @@ adminLogin();
                                 <input name="name" type="text" class="form-control shadow-none" required>
                             </div>
                             <div class="col-md-6 mb-3">
+                                <label class="form-label">Location</label>
+                                <input name="location" type="text" class="form-control shadow-none" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label">Area</label>
                                 <input name="area" type="number"  class="form-control shadow-none" required>
                             </div>
@@ -88,6 +92,7 @@ adminLogin();
                                 <label class="form-label">Quantity</label>
                                 <input name="quantity" type="number"  class="form-control shadow-none" required>
                             </div>
+
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Adult(max)</label>
                                 <input name="adult" type="number"  class="form-control shadow-none" required>
@@ -160,6 +165,10 @@ adminLogin();
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Name</label>
                                 <input name="name" type="text" class="form-control shadow-none" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Location</label>
+                                <input name="location" type="text" class="form-control shadow-none" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Area</label>
@@ -286,6 +295,7 @@ adminLogin();
             let data = new FormData();
             data.append('add_room', '');
             data.append('name', add_room_form.elements['name'].value);
+            data.append('location', add_room_form.elements['location'].value);
             data.append('area', add_room_form.elements['area'].value);
             data.append('price', add_room_form.elements['price'].value);
             data.append('quantity', add_room_form.elements['quantity'].value);
@@ -368,6 +378,8 @@ adminLogin();
             xhr.onload = function() {
             let data=JSON.parse(this.responseText);
             edit_room_form.elements['name'].value=data.roomdata.name;
+            edit_room_form.elements['location'].value=data.roomdata.location;
+
             edit_room_form.elements['area'].value=data.roomdata.area;
             edit_room_form.elements['price'].value=data.roomdata.price;
             edit_room_form.elements['quantity'].value=data.roomdata.quantity;
@@ -427,6 +439,9 @@ adminLogin();
             data.append('room_id', edit_room_form.elements['room_id'].value);
 
             data.append('name', edit_room_form.elements['name'].value);
+            data.append('location', edit_room_form.elements['location'].value);
+            
+            
             data.append('area', edit_room_form.elements['area'].value);
             data.append('price', edit_room_form.elements['price'].value);
             data.append('quantity', edit_room_form.elements['quantity'].value);

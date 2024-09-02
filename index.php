@@ -204,6 +204,13 @@
                             </span>
                         
                         </div>
+                          <div class='Location mb-3'>
+                          <h6 class='mb-1'>Location</h6>
+                            <span class='badge rounded-pill bg-light text-dark  text-wrap '>
+                            {$room_data['location']}
+                            </span>
+                            
+                        </div>
                         $rating_data
                         <div class="d-flex justify-content-evenly mb-2">             
                         $book_btn 

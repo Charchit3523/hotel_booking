@@ -14,10 +14,10 @@
         $flag=0;
 
         // Insert new room data
-        $q1 ="INSERT INTO `rooms`(`name`, `area`, `price`, `quantity`, `adult`, `children`, `description`) VALUES (?,?,?,?,?,?,?)";
-        $values = [$frm_data['name'], $frm_data['area'], $frm_data['price'], $frm_data['quantity'],$frm_data['adult'], $frm_data['children'], $frm_data['desc']];
+        $q1 ="INSERT INTO `rooms`(`name`,`location`, `area`, `price`, `quantity`, `adult`, `children`, `description`) VALUES (?,?,?,?,?,?,?,?)";
+        $values = [$frm_data['name'], $frm_data['location'],$frm_data['area'], $frm_data['price'], $frm_data['quantity'],$frm_data['adult'], $frm_data['children'], $frm_data['desc']];
        
-        if(insert($q1,$values,'siiiiis')){
+        if(insert($q1,$values,'ssiiiiis')){
             $flag=1;
         }
 
@@ -151,10 +151,10 @@
         $flag=0;
         
         // Update room data
-        $q1="UPDATE `rooms` SET `name`=?,`area`=?,`price`=?,`quantity`=?,`adult`=?,`children`=?,`description`=? WHERE `id`=?";
-        $values = [$frm_data['name'], $frm_data['area'], $frm_data['price'], $frm_data['quantity'],$frm_data['adult'], $frm_data['children'], $frm_data['desc'], $frm_data['room_id']];
+        $q1="UPDATE `rooms` SET `name`=?,`location`=?,`area`=?,`price`=?,`quantity`=?,`adult`=?,`children`=?,`description`=? WHERE `id`=?";
+        $values = [$frm_data['name'],$frm_data['location'], $frm_data['area'], $frm_data['price'], $frm_data['quantity'],$frm_data['adult'], $frm_data['children'], $frm_data['desc'], $frm_data['room_id']];
         
-        if(update($q1, $values,'siiiiisi')){
+        if(update($q1, $values,'ssiiiiisi')){
           $flag=1;
         }
 

@@ -20,8 +20,8 @@ if (isset($_POST['pay_now'])) {
 
 
     $booking_id = mysqli_insert_id($con);
-    $q2 = "INSERT INTO `booking_details`( `booking_id`, `room_name`, `price`, `total_pay`, `user_name`, `phonenumber`, `address`) VALUES (?,?,?,?,?,?,?)";
-    insert($q2, [$booking_id, $_SESSION['room']['name'], $_SESSION['room']['price'], $_SESSION['room']['payment'], $form_data['name'], $form_data['phonenum'], $form_data['address']], 'issssss');
+    $q2 = "INSERT INTO `booking_details`( `booking_id`, `room_name`, `price`, `total_pay`, `user_name`, `phonenumber`, `address`,`no_of_rooms`,`adult`,`children`) VALUES (?,?,?,?,?,?,?,?,?,?)";
+    insert($q2, [$booking_id, $_SESSION['room']['name'], $_SESSION['room']['price'], $_SESSION['room']['payment'], $form_data['name'], $form_data['phonenum'], $form_data['address'],$form_data['no_of_rooms'],$form_data['adult'],$form_data['children']], 'issssssiii');
 }
 
 $querry1 = "SELECT `booking_id`,`user_id`, `payment` FROM `booking_order` WHERE `room_id`={$_SESSION['room']['id']} ORDER BY `booking_id` DESC LIMIT 1";

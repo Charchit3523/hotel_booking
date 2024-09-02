@@ -19,7 +19,7 @@ if (isset($_GET['gen_pdf']) && isset($_GET['id'])) {
     $checkout = date("d-m-Y", strtotime($data['check_out']));
 
     $table_data = "
-        <h2>BOOKING RECEIPT</h2>
+        <h2><img src='images/carousel/logo.png'class='mt-3 align-middle fs-3' width='50px'> BOOKING RECEIPT</h2>
         <table border='1'>
             <tr>
                 <td colspan='2'><b>Status: {$data['booking_status']}</td>

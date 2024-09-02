@@ -107,15 +107,49 @@
                   <div class="d-flex">
                     <div class="me-3 ">
                       <label  class="form-label">Adults</label> 
-                      <input type="nimber" min="1"  value="<?php  echo $adult_default?>" id="adults" oninput="guests_filter()" class="form-control shadow-none">
+                      <input type="number" min="1"  value="<?php  echo $adult_default?>" id="adults" oninput="guests_filter()" class="form-control shadow-none">
                     </div>
                     <div>
                       <label  class="form-label">Childrens</label> 
                       <input type="number"  min="0" value="<?php  echo $children_default?>"   id="childrens" oninput="guests_filter()" class="form-control shadow-none">
                     </div>
                   </div>
+                  
                 </div>
               </div>
+              <div class="border bg-light p-3 rounded mb-3">
+              <h5 class="d-flex align-items-center justify-content-between mb-3" style="font-size:18px;">
+                      <span>
+                      Location
+                      </span>
+                      <button id="location_btn" onclick="location_clear()" class="btn btn-sm text-secondary d-none shadow-none">Reset</button>
+                  </h5>
+                  <div class="d-flex">
+                    <div class="me-3 ">
+                      
+                      <input type="text"  class="form-control shadow-none" id="location" oninput="location_filter()">
+                    </div>
+                  </div>
+                 
+
+              </div>
+              <div class="border bg-light p-3 rounded mb-3">
+              <h5 class="d-flex align-items-center justify-content-between mb-3" style="font-size:18px;">
+                      <span>
+                      Price
+                      </span>
+                      <button id="price_btn"onclick="price_clear()" class="btn btn-sm text-secondary d-none shadow-none">Reset</button>
+                  </h5>
+                  <div class="d-flex">
+                    <div class="me-3 ">
+                     
+                      <input type="number"  class="form-control shadow-none"  id="price" oninput="price_filter()">
+                    </div>
+                  </div>
+
+
+              </div>
+
             </div>
           </nav>
       </div>
@@ -131,13 +165,18 @@
 
     <script>
       let rooms_data=document.getElementById('rooms-data');
-
       let checkin=document.getElementById('checkin');
       let checkout=document.getElementById('checkout');
       let check_avail_btn=document.getElementById('check_avail_btn');
       let adults=document.getElementById('adults');
       let childrens=document.getElementById('childrens');
       let guests_btn=document.getElementById('guests_btn');
+      let locationInput = document.getElementById('location');
+      let location_btn=document.getElementById('location_btn');
+      let price = document.getElementById('price');
+      let price_btn=document.getElementById('price_btn');
+
+
       let facilities_btn=document.getElementById('facilities_btn');
       let reset_btn=document.getElementById('reset_btn');
       
@@ -150,6 +189,14 @@
               checkin: checkin.value,
               checkout: checkout.value
           });
+          let location=JSON.stringify({
+            location: locationInput.value
+          });
+          let priceData = {
+              price: price.value // Get the price from the input
+          };
+          let priceString = JSON.stringify(priceData); 
+
 
           // Stringify guests values
           let guests = JSON.stringify({
@@ -183,7 +230,7 @@
           let xhr = new XMLHttpRequest();
 
           // Configure it: GET-request for the URL with query parameters
-          xhr.open("GET", `ajax/rooms.php?fetch_rooms&check_avail=${chk_avail}&guests=${guests}&facility_list=${facility_list}`, true);
+          xhr.open("GET", `ajax/rooms.php?fetch_rooms&check_avail=${chk_avail}&guests=${guests}&facility_list=${facility_list}&location=${location}&price=${priceString}`, true);
 
           // Set up a function to show a loading spinner while the request is in progress
           xhr.onprogress = function () {
@@ -223,13 +270,40 @@
 
         }
       }
+      function location_filter(){
+        if(locationInput.value!=''){
+          fetch_rooms();
+          location_btn.classList.remove('d-none');
+          reset_btn.classList.remove('d-none');
+
+        }
+      }
+      function price_filter(){
+        if(price.value!=''){
+          fetch_rooms();
+          price_btn.classList.remove('d-none');
+          reset_btn.classList.remove('d-none');
+
+        }
+      }
       function check_avail_clear(){
         checkin.value='';
         checkout.value='';
         check_avail_btn.classList.add('d-none');
         fetch_rooms();
       }
-      
+      function location_clear(){
+       locationInput.value='';
+       
+        location_btn.classList.add('d-none');
+        fetch_rooms();
+      }
+      function price_clear(){
+       price.value='';
+       
+        price_btn.classList.add('d-none');
+        fetch_rooms();
+      }
       function guests_filter(){
         if(adults.value>0 ||childrens.value>=0){
           fetch_rooms();
@@ -242,6 +316,11 @@
         adults.value='';
         childrens.value='';
         guests_btn.classList.add('d-none');
+        fetch_rooms();
+      }
+      function location_clear(){
+        locationInput.value='';
+        location_btn.classList.add('d-none');
         fetch_rooms();
       }
       function facilities_clear(){

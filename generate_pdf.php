@@ -22,7 +22,7 @@ if (isset($_GET['gen_pdf']) && isset($_GET['id'])) {
     $checkout = date("d-m-Y", strtotime($data['check_out']));
 
     $table_data = "
-        <h2>BOOKING RECEIPT</h2>
+        <h2> <img src='images/carousel/logo.png'class='mt-3 align-middle fs-3' width='50px'>BOOKING RECEIPT</h2>
         <table border='1'>
             <tr>
                 <td colspan='2'><b>Status: {$data['booking_status']}</td>
@@ -40,13 +40,20 @@ if (isset($_GET['gen_pdf']) && isset($_GET['id'])) {
                 <td><b>Cost: Rs {$data['price']}</td>
             </tr>
             <tr>
+                <td><b>Adult: {$data['adult']}</td>
+                <td><b>Children: {$data['children']}</td>
+            </tr>
+            <tr>
                 <td><b>Check-in: $checkin</td>
                 <td><b>Check-out: $checkout</td>
             </tr>
+            <tr>
+                <td colspan='2'><b>No Of Room: {$data['no_of_rooms']}</td>
+            </tr>
         </table>
-    ";
-
-    $mpdf = new \Mpdf\Mpdf();
+            ";
+            
+            $mpdf = new \Mpdf\Mpdf();
     $mpdf->WriteHTML($table_data);
     $mpdf->Output($data['booking_id'], 'D');
 } else {

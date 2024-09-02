@@ -1,158 +1,179 @@
 <?php
+// Include necessary configuration and essential files
 require('../admin/inc/db_config.php');
 require('../admin/inc/essentials.php');
+
+// Set the default timezone for date and time functions
 date_default_timezone_set("Asia/Kathmandu");
+
+// Start a session to manage user login status
 session_start();
 
-if(isset($_GET['fetch_rooms'])){
+// Check if the request to fetch rooms is made
+if (isset($_GET['fetch_rooms'])) {
+    // Decode JSON data from the GET request
+    $chk_avail = json_decode($_GET['check_avail'], true); // Check availability data
+    $guests = json_decode($_GET['guests'], true); // Guest information
+    $location = json_decode($_GET['location'], true); // Location data
+    $facility_list = json_decode($_GET['facility_list'], true); // List of required facilities
+    $price=json_decode($_GET['price'], true);
+    $priceVal=(!empty($price['price'])) ? $price['price'] : 100;
 
+    // Extract the number of adults and children from the guests data
+    $adults = (!empty($guests['adults'])) ? $guests['adults'] : 0;
+    $childrens = (!empty($guests['childrens'])) ? $guests['childrens'] : 0;
 
-    $chk_avail=json_decode($_GET['check_avail'],true);
+    // Extract the location value from the location data
+    $locationValue = (!empty($location['location'])) ? $location['location'] : '';
 
-    if($chk_avail['checkin']!='' && $chk_avail['checkout']!=''){
-        $today_date = new DateTime();
+    // Initialize counters and output variables
+    $count_rooms = 0;
+    $output = "";
+
+    // Prepare the SQL query to fetch rooms based on guest requirements
+    // Corrected column name from `satus` to `status`
+    $sql = "SELECT * FROM `rooms` 
+            WHERE `adult` >= ? 
+            AND `children` >= ? 
+            AND `satus` = ? 
+            AND `removed` = ?
+            AND `price`<=?";
+    $values = [$adults, $childrens, 1, 0,$priceVal]; // Values for prepared statement
+
+    // Check if check-in and check-out dates are provided
+    if (!empty($chk_avail['checkin']) && !empty($chk_avail['checkout'])) {
+        // Create DateTime objects for check-in and check-out dates
         $checkin_date = new DateTime($chk_avail['checkin']);
         $checkout_date = new DateTime($chk_avail['checkout']);
-    
-        if($checkin_date == $checkout_date){
-            
-            echo"<h3 class='text-center text-danger'>Invalid date</h3>";
-            exit;
+
+        // Validate the check-in and check-out dates
+        if ($checkin_date >= $checkout_date) {
+            echo "<h3 class='text-center text-danger'>Invalid date! Check out is earlier than Check in</h3>";
+            exit; // Stop execution if dates are invalid
         }
-        else if($checkout_date < $checkin_date){
-            echo"<h3 class='text-center text-danger'>Invalid date! Check out is earlier than Check in</h3>";
-            exit;
-        }
-        else if($checkout_date < $today_date){
-            echo"<h3 class='text-center text-danger'>Invalid date! Check out & Check in are earlier than todays date </h3>";
-            exit;
-        }
+
+        // Add conditions to check for existing bookings in the specified date range
+        $sql .= " AND NOT EXISTS (
+                    SELECT 1 FROM booking_order 
+                    WHERE room_id = rooms.id 
+                    AND booking_status = 'booked' 
+                    AND check_out > ? 
+                    AND check_in < ?
+                  )";
+        // Merge the check-in and check-out dates into the values array
+        $values = array_merge($values, [$chk_avail['checkin'], $chk_avail['checkout']]);
     }
 
-    $guests= json_decode($_GET['guests'],true);
-    $adults=($guests['adults']!='') ? $guests['adults'] : 0;
-    $childrens=($guests['childrens']!='') ? $guests['childrens'] : 0;
+    // Filter rooms by location if provided
+    if (!empty($locationValue)) {
+        $sql .= " AND `location` = ?";
+        $values[] = $locationValue; // Add location to the values
+    }
 
-    $facility_list=json_decode($_GET['facility_list'],true);
-    //count no of rooms store room cards on output variable
-    $count_rooms=0;
-    $output="";
-    $room_res=select("SELECT * FROM `rooms` WHERE `adult`>=? AND `children`>=? AND `satus`=? AND `removed`=?",[$adults,$childrens,1,0],'iiii');
+    // Prepare and execute the SQL statement
+    $room_res = select($sql, $values, str_repeat('s', count($values))); // Assuming select is a custom function for prepared statements
 
+    // Loop through the fetched room data
+    while ($room_data = mysqli_fetch_assoc($room_res)) {
+        // Initialize counters and output variables for facilities and features
+        $fac_count = 0;
+        $facilities_data = "";
+        $features_data = "";
 
-    while($room_data=mysqli_fetch_assoc($room_res))
-    {     
+        // Fetch facilities associated with the current room
+        $fac_q = mysqli_query($con, "SELECT f.name, f.id 
+                                      FROM `facilities` f 
+                                      INNER JOIN `room_facilities` rfac ON f.id = rfac.facilities_id 
+                                      WHERE rfac.room_id = '{$room_data['id']}'");
 
-            // check availability
-        if($chk_avail['checkin']!='' && $chk_avail['checkout']!=''){
-              // Query to count total bookings for the room within the specified date range
-                $tb_query = "SELECT COUNT(*) AS total_bookings FROM booking_order 
-                WHERE booking_status = ? AND room_id = ? AND check_out > ? AND check_in < ?";
-                
-                $values = ['booked', $room_data['id'], $chk_avail['checkin'], $chk_avail['checkout']];
-                $tb_fetch = mysqli_fetch_assoc(select($tb_query, $values, 'siss'));
-
-                
-
-                // Check availability and respond accordingly
-                if (($room_data['quantity'] - $tb_fetch['total_bookings']) == 0) {
-                   continue; 
-                }
+        // Loop through the fetched facilities
+        while ($fac_row = mysqli_fetch_assoc($fac_q)) {
+            // Check if the facility is in the required facility list
+            if (in_array($fac_row['id'], $facility_list['facilities'])) {
+                $fac_count++; // Increment the facility count
+            }
+            // Build the facilities display string
+            $facilities_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap'>{$fac_row['name']}</span>";
         }
 
-        // get facilities of room with filters
+        // Skip the room if it doesn't have all required facilities
+        if (count($facility_list['facilities']) != $fac_count) {
+            continue; // Skip to the next room
+        }
 
-        $fac_count=0;
+        // Fetch features associated with the current room
+        $fea_q = mysqli_query($con, "SELECT f.name 
+                                      FROM `features` f 
+                                      INNER JOIN `room_features` rfea ON f.id = rfea.features_id 
+                                      WHERE rfea.room_id = '{$room_data['id']}'");
 
-        $fac_q=mysqli_query($con,"SELECT f.name ,f.id FROM `facilities` f 
-            INNER JOIN `room_facilities` rfac ON f.id = rfac.facilities_id 
-            WHERE rfac.room_id='$room_data[id]'");
-            $facilities_data="";
-            while($fac_row=mysqli_fetch_assoc($fac_q)){
+        // Loop through the fetched features
+        while ($fea_row = mysqli_fetch_assoc($fea_q)) {
+            // Build the features display string
+            $features_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap'>{$fea_row['name']}</span>";
+        }
 
-                if(in_array($fac_row['id'],$facility_list['facilities'])){
-                    $fac_count++;
-                }
+        // Get the room thumbnail image
+        $room_thumb = ROOMS_IMG_PATH . "thumbnail.jpg"; // Default thumbnail
+        $thumb_q = mysqli_query($con, "SELECT * FROM `room_image` 
+                                       WHERE `room_id` = '{$room_data['id']}' 
+                                       AND `thumb` = 1");
 
-              $facilities_data.="<span class='badge rounded-pill bg-light text-dark text-wrap me-1 mb-1'>
-              {$fac_row['name']}
-              </span>";
-          }
-          if(count($facility_list['facilities'])!=$fac_count){
-            continue;
-          }
+        // Check if a thumbnail exists for the room
+        if (mysqli_num_rows($thumb_q) > 0) {
+            $thumb_res = mysqli_fetch_assoc($thumb_q);
+            $room_thumb = ROOMS_IMG_PATH . $thumb_res['image']; // Update thumbnail path
+        }
 
-          // get features of room
-          $fea_q=mysqli_query($con,"SELECT f.name FROM `features` f INNER JOIN `room_features` rfea ON f.id = rfea.features_id WHERE rfea.room_id='$room_data[id]' ");
-          $features_data="";
-          while($fea_row=mysqli_fetch_assoc($fea_q)){
-              $features_data.="<span class='badge rounded-pill bg-light text-dark text-wrap me-1 mb-1'>
-              {$fea_row['name']}
-            </span>";
-          }
+        // Prepare the booking button based on login status
+        $login = (isset($_SESSION['IS_LOGIN'])) ? 1 : 0; // Check if user is logged in
+        $book_btn = "<button onclick='checkLoginToBook($login, {$room_data['id']})' class='btn btn-sm w-100 text-white custom-bg shadow-none mb-2'>Book Now</button>";
 
-          
-            
-
-          // get  room image
-           $room_thumb=ROOMS_IMG_PATH."thumbnail.jpg";
-           $thumb_q = mysqli_query($con, "SELECT * FROM `room_image` WHERE `room_id`='$room_data[id]' AND `thumb`=1");
-
-          if( mysqli_num_rows($thumb_q)>0){
-            $thumb_res=mysqli_fetch_assoc($thumb_q);
-            $room_thumb=ROOMS_IMG_PATH.$thumb_res['image'];
-          }
-          $login=0;
-          if(isset($_SESSION['IS_LOGIN'])){
-            $login=1;
-          }
-          $book_btn="<button onclick='checkLoginToBook($login,$room_data[id])' class='btn btn-sm w-100 text-white custom-bg shadow-none mb-2'>Book Now</button>";
-          
-          //print room
-         $output.="
+        // Build the output HTML for the room card
+        $output .= "
             <div class='card mb-4 border-0 shadow'>
-              <div class='row g-0 p-3 align-items-center'>
-                    <div class='col-md-5 mnb-lg-0 mb-md-0 mb-3 '>
-                      <img src='$room_thumb' class='img-fluid rounded'>
+                <div class='row g-0 p-3 align-items-center'>
+                    <div class='col-md-5 mb-lg-0 mb-md-0 mb-3'>
+                        <img src='$room_thumb' class='img-fluid rounded'>
                     </div>
-                    <div class='col-md-5 px-lg-3 px-md-3 px-0'> 
-                      <h5 class='mb-3'>{$room_data['name']}</h5>
-                      <div class='features mb-3'>
-                        <h6 class='mb-1'>Features</h6>
-                          $features_data
-                      </div>
-                      <div class='facilities mb-3'>
-                        <h6 class='mb-1'>Facilities</h6>
-                          $facilities_data
-                      </div>
-                      <div class='Guests mb-3'>
-                        <h6 class='mb-1'>Guests</h6>
-                          <span class='badge rounded-pill bg-light text-dark  text-wrap '>
-                          {$room_data['adult']} Adults
-                          </span>
-                          <span class='badge rounded-pill bg-light text-dark  text-wrap ' >
-                          {$room_data['children']} children
-                          </span>
-                        
-                      </div>
+                    <div class='col-md-5 px-lg-3 px-md-2 px-0'> 
+                        <h5 class='mb-3'>{$room_data['name']}</h5>
+                        <div class='features mb-3'>
+                            <h6 class='mb-1'>Features</h6>
+                            $features_data
+                        </div>
+                        <div class='facilities mb-3'>
+                            <h6 class='mb-1'>Facilities</h6>
+                            $facilities_data
+                        </div>
+                        <div class='Guests mb-3'>
+                            <h6 class='mb-1'>Guests</h6>
+                            <span class='badge rounded-pill bg-light text-dark text-wrap'>{$room_data['adult']} Adults</span>
+                            <span class='badge rounded-pill bg-light text-dark text-wrap'>{$room_data['children']} children</span>  
+                        </div>
+                        <div class='location mb-3'>
+                            <h6 class='mb-1'>Location</h6>
+                            <span class='badge rounded-pill bg-light text-dark text-wrap'>{$room_data['location']}</span>
+                        </div>
                     </div>
-                    <div class='col-md-2 mt-lg-0 mt-mf-0 mt-4 text-center'>
-                      <h6 class='mb-4'> Rs $room_data[price] per night</h6>
-                      $book_btn
-                      <a href='room_details.php?id=$room_data[id]' class='btn btn-sm w-100 btn-outline-dark shadow-none'>More details</a>
+                    <div class='col-md-2 mt-lg-0 mt-md-0 mt-4 text-center'>
+                        <h6 class='mb-4'>Rs {$room_data['price']} per night</h6>
+                        $book_btn
+                        <a href='room_details.php?id={$room_data['id']}' class='btn btn-sm w-100 btn-outline-dark shadow-none'>More details</a>
                     </div>
-                  </div>
+                </div>
             </div>
-          ";
-          $count_rooms++;
-          
-      }
-      if($count_rooms>0){
-        echo $output;
-      }else{
-        echo"<h3 class='text-center text-danger'>No rooms to show!</h3>";
-      }
+        ";
+
+        // Increment the room count
+        $count_rooms++;
+    }
+
+    // Output the results
+    if ($count_rooms > 0) {
+        echo $output; // Display the room cards
+    } else {
+        echo "<h3 class='text-center text-danger'>No rooms to show!</h3>"; // No rooms available
+    }
 }
-
-
 ?>

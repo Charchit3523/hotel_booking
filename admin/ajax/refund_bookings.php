@@ -4,7 +4,9 @@ require('../inc/essentials.php');
 adminLogin();
 
 if(isset($_POST['get_bookings'])){
-    $q = "SELECT bo.*, bd.* FROM `booking_order` bo INNER JOIN `booking_details` bd ON bo.booking_id=bd.booking_id WHERE bo.booking_status = 'cancelled' AND bo.refund = 0 ORDER by bo.booking_id ASC";
+    $q = "SELECT bo.*, bd.* FROM `booking_order` bo 
+    INNER JOIN `booking_details` bd ON bo.booking_id=bd.booking_id 
+    WHERE bo.booking_status = 'cancelled' AND bo.refund = 0 ORDER by bo.booking_id ASC";
    
     $res = mysqli_query($con, $q);
     $i = 1;

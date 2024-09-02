@@ -92,6 +92,7 @@
                   <!-- User name input -->
                   <input name="name" type="text" value="<?php echo $user_data['name'] ?>" class="form-control shadow-none" required>
                 </div>
+               
                 <div class="col-md-6 mb-3">
                   <label class="form-label">Phone number</label>
                   <!-- User phone number input -->
@@ -101,6 +102,21 @@
                   <label class="form-label">Address</label>
                   <!-- User address input -->
                   <textarea name="address" class="form-control shadow-none" rows="1" required><?php echo $user_data['address'] ?></textarea>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Adult</label>
+                  <!-- User name input -->
+                  <input name="adult" type="number"  class="form-control shadow-none" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">children</label>
+                  <!-- User name input -->
+                  <input name="children" type="number"  class="form-control shadow-none" required>
+                </div>
+                <div class="col-md-12 mb-3">
+                  <label class="form-label">No of Rooms</label>
+                  <!-- User name input -->
+                  <input name="no_of_rooms" type="number"  class="form-control shadow-none" required>
                 </div>
                 <div class="col-md-6 mb-3">
                   <label class="form-label">Check-in</label>
